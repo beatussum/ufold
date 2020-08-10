@@ -17,18 +17,20 @@ project("lib${CMAKE_PROJECT_NAME}"
         VERSION 0.9.0
         LANGUAGES CXX)
 
-set(LIBUFOLD_HPP)
-set(LIBUFOLD_CPP)
+set(LIBUFOLD_HPP
+    include/ufold/Format.hpp)
+set(LIBUFOLD_CPP
+    Format.cpp)
 
 add_library("${PROJECT_NAME}" SHARED
             "${LIBUFOLD_HPP}" "${LIBUFOLD_CPP}")
+target_include_directories("${PROJECT_NAME}"
+                           PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+                           PUBLIC "${EXPORT_DIR}")
 
 include(GenerateExportHeader)
 generate_export_header("${PROJECT_NAME}"
-                       EXPORT_FILE_NAME "${EXPORT_DIR}/${PROJECT_NAME}.hpp")
-
-target_include_directories("${PROJECT_NAME}"
-                           PUBLIC "${EXPORT_DIR}")
+                       EXPORT_FILE_NAME "${EXPORT_DIR}/${PROJECT_NAME}_export.hpp")
 
 doxygen_add_docs(docs
                  ${LIBUFOLD_HPP}
