@@ -15,6 +15,8 @@
  * with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef UFOLD_FORMAT_HPP
+#define UFOLD_FORMAT_HPP
 
 #include "libufold_export.hpp"
 
@@ -52,3 +54,5 @@ namespace ufold
         flags_t m_flags_;
     };
 }
+
+#endif // UFOLD_FORMAT_HPP
