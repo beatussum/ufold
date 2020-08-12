@@ -16,38 +16,15 @@
  */
 
 
-#include "ufold/Format.hpp"
+#ifndef UFOLD_CORE_IPP
+#define UFOLD_CORE_IPP
 
-namespace ufold
+#include <type_traits>
+
+template<typename _Enum>
+constexpr auto underlying_cast(const _Enum a) noexcept
 {
-    constexpr bool operator&(const Format a, const Format::Formats b) noexcept
-    {
-        return a.m_flags_ & static_cast<Format::flags_t>(b);
-    }
-
-    Format Format::operator=(const Format a) noexcept
-    {
-        m_flags_ = a.m_flags_;
-
-        return *this;
-    }
-
-    Format Format::operator=(const Formats a) noexcept
-    {
-        m_flags_ = static_cast<flags_t>(a);
-
-        return *this;
-    }
-
-    constexpr Format Format::operator|(const Format a) noexcept
-    {
-        return m_flags_ | a.m_flags_;
-    }
-
-    Format Format::operator|=(const Format a) noexcept
-    {
-        *this = *this | a.m_flags_;
-
-        return *this;
-    }
+    return static_cast<std::underlying_type_t<_Enum>>(a);
 }
+
+#endif // UFOLD_CORE_IPP

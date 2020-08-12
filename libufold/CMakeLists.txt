@@ -18,12 +18,14 @@ project("lib${CMAKE_PROJECT_NAME}"
         LANGUAGES CXX)
 
 set(LIBUFOLD_HPP
+    include/ufold/core.hpp
     include/ufold/Format.hpp)
-set(LIBUFOLD_CPP
-    Format.cpp)
+set(LIBUFOLD_IPP
+    include/ufold/core.ipp)
+set(LIBUFOLD_CPP)
 
 add_library("${PROJECT_NAME}" SHARED
-            "${LIBUFOLD_HPP}" "${LIBUFOLD_CPP}")
+            "${LIBUFOLD_HPP}" "${LIBUFOLD_IPP}" "${LIBUFOLD_CPP}")
 target_include_directories("${PROJECT_NAME}"
                            PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
                            PUBLIC "${EXPORT_DIR}")

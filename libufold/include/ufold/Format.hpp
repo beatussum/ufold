@@ -15,44 +15,23 @@
  * with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 #ifndef UFOLD_FORMAT_HPP
 #define UFOLD_FORMAT_HPP
 
-#include "libufold_export.hpp"
+#include "ufold/core.hpp"
 
 #include <cstdint>
 
 namespace ufold
 {
-    class LIBUFOLD_EXPORT Format final
-    {
-    public:
-        using flags_t = uint8_t;
+    using formats_t = uint8_t;
 
-        enum Formats : flags_t {
-            prioritizePunctuation = 0x1
-        };
-    private:
-        constexpr Format(const flags_t f) noexcept
-            : m_flags_(f)
-        {}
-    public:
-        constexpr Format() noexcept
-            : m_flags_(0)
-        {}
-
-        Format(const Format& f) noexcept { *this = f; }
-        Format(const Formats f) noexcept { *this = f; }
-
-        Format operator=(const Format) noexcept;
-        Format operator=(const Formats) noexcept;
-
-        constexpr Format operator|(const Format) noexcept;
-        Format operator|=(const Format) noexcept;
-        friend constexpr bool operator&(const Format, const Formats) noexcept;
-    private:
-        flags_t m_flags_;
+    enum class Formats : formats_t {
+        prioritizePunctuation = 0x1
     };
+
+    UFOLD_ADD_FLAGS_OP(Formats)
 }
 
 #endif // UFOLD_FORMAT_HPP
