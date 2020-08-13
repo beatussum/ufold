@@ -39,22 +39,22 @@ constexpr auto underlying_cast(const _Enum a) noexcept;
  * @brief Add some operator overloads to use an `enum` as a flag
  * @param T the `enum` to which the operators are added
  */
-#define UFOLD_ADD_FLAGS_OP(T)                                        \
-constexpr T operator|(const T a, const T b) noexcept                 \
-{                                                                    \
-    return static_cast<T>(underlying_cast(a) | underlying_cast(b));  \
-}                                                                    \
-                                                                     \
-constexpr T operator|=(T a, const T b) noexcept                      \
-{                                                                    \
-    a = a | b;                                                       \
-                                                                     \
-    return a;                                                        \
-}                                                                    \
-                                                                     \
-constexpr T operator&(const T a, const T b) noexcept                 \
-{                                                                    \
-    return static_cast<T>(underlying_cast(a) & underlying_cast(b));  \
+#define UFOLD_ADD_FLAGS_OP(T)                                       \
+constexpr T operator|(const T a, const T b) noexcept                \
+{                                                                   \
+    return static_cast<T>(underlying_cast(a) | underlying_cast(b)); \
+}                                                                   \
+                                                                    \
+constexpr T operator|=(T a, const T b) noexcept                     \
+{                                                                   \
+    a = a | b;                                                      \
+                                                                    \
+    return a;                                                       \
+}                                                                   \
+                                                                    \
+constexpr T operator&(const T a, const T b) noexcept                \
+{                                                                   \
+    return static_cast<T>(underlying_cast(a) & underlying_cast(b)); \
 }
 // ADD_FLAGS_OPERATORS(T)
 
