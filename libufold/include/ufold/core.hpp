@@ -15,13 +15,30 @@
  * with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file ufold/core.hpp
+ * @brief some core utilities used by the library
+ * @author Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
+ * @date 2020-08-13
+ * @copyright GPL-3+
+ */
+
 
 #ifndef UFOLD_CORE_HPP
 #define UFOLD_CORE_HPP
 
+/**
+ * @tparam _Enum the `enum` type
+ * @param  a     the `enum` constant
+ * @return the `enum` constant \p a as its underlying type
+ */
 template<typename _Enum>
 constexpr auto underlying_cast(const _Enum a) noexcept;
 
+/**
+ * @brief add some operator overloads to use an `enum` as a flag
+ * @param T the `enum` to which the operators are added
+ */
 #define UFOLD_ADD_FLAGS_OP(T)                                        \
 constexpr T operator|(const T a, const T b) noexcept                 \
 {                                                                    \
