@@ -23,6 +23,8 @@ project(ufold
         HOMEPAGE_URL "https://github.com/beatussum/ufold/"
         LANGUAGES CXX)
 
+option(WITH_DOC "Build the documentation" OFF)
+
 unset(CMAKE_CXX_FLAGS_RELEASE CACHE)
 macro(add_gcc_cxx_flags _flags)
     if(CMAKE_COMPILER_IS_GNUCXX)
@@ -39,17 +41,28 @@ endif()
 set(EXPORT_DIR "${CMAKE_BINARY_DIR}/exports" CACHE PATH
     "The path where the export header is generated")
 
-set(DOCS_DIR "${CMAKE_BINARY_DIR}/docs" CACHE PATH
-    "The path where the documentation is built")
+if (WITH_DOC)
+    set(DOC_DIR "${CMAKE_BINARY_DIR}/doc" CACHE PATH
+        "The path where the documentation is built")
 
-find_package(Doxygen REQUIRED)
-set(DOXYGEN_OUTPUT_DIRECTORY "${DOCS_DIR}")
-set(DOXYGEN_INLINE_INHERITED_MEMB YES)
-set(DOXYGEN_ALIASES "pexample=@par Example")
-set(DOXYGEN_HIDE_UNDOC_CLASSES YES)
-set(DOXYGEN_HIDE_IN_BODY_DOCS YES)
-set(DOXYGEN_WARN_NO_PARAMDOC YES)
-set(DOXYGEN_WARN_LOGFILE "${DOCS_DIR}/log")
+    find_package(Doxygen REQUIRED)
+
+    set(DOXYGEN_OUTPUT_DIRECTORY "${DOC_DIR}")
+    set(DOXYGEN_INLINE_INHERITED_MEMB YES)
+    set(DOXYGEN_ALIASES "pexample=@par Example")
+    set(DOXYGEN_HIDE_UNDOC_CLASSES YES)
+    set(DOXYGEN_HIDE_IN_BODY_DOCS YES)
+    set(DOXYGEN_WARN_NO_PARAMDOC YES)
+    set(DOXYGEN_WARN_LOGFILE "${DOC_DIR}/log")
+endif()
+
+macro(add_to_doc _headers)
+    if (WITH_DOC)
+        doxygen_add_docs(doc
+                         "${_headers}"
+                         COMMENT "Generating documentation…")
+    endif()
+endmacro()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)

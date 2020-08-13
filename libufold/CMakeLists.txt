@@ -34,6 +34,4 @@ include(GenerateExportHeader)
 generate_export_header("${PROJECT_NAME}"
                        EXPORT_FILE_NAME "${EXPORT_DIR}/${PROJECT_NAME}_export.hpp")
 
-doxygen_add_docs(docs
-                 ${LIBUFOLD_HPP}
-                 COMMENT "Generating documentation…")
+add_to_doc("${LIBUFOLD_HPP}")
