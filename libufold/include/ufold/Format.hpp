@@ -28,10 +28,22 @@ namespace ufold
     using formats_t = uint8_t;
 
     enum class Formats : formats_t {
-        prioritizePunctuation = 0x1
+        PreferPunctuation = 0x1,
+        PreferCapital = 0x2,
+        FillFromCenter = 0x4,
+        mask_Specials = 0x7,
+        FillFromLeft = 0x8,
+        FillFromRight = 0x10,
+        mask_Position = 0x18
     };
 
     UFOLD_ADD_FLAGS_OP(Formats)
+
+    constexpr Formats defaultFormat = Formats::PreferPunctuation
+                                    | Formats::PreferCapital
+                                    | Formats::FillFromCenter
+                                    | Formats::FillFromLeft
+                                    | Formats::FillFromRight;
 }
 
 #endif // UFOLD_FORMAT_HPP
