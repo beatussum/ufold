@@ -94,7 +94,7 @@ namespace ufold
          *
          * @note (a) Formats::FillFromLeft, Formats::FillFromRight
          *           and Formats::FillFromCenter are set.
-         * @note (b) same thing except that Formats::FillFromCenter
+         * @note (b) Same thing except that Formats::FillFromCenter
          *           is unset.
          * @note (c) Only Formats::FillFromLeft and Formats::FillFromCenter
          *           are set.
@@ -142,7 +142,7 @@ namespace ufold
 
     UFOLD_ADD_FLAGS_OP(Formats)
 
-    /// default value used for #Formats flag
+    /// Default value used for #Formats flag
     constexpr Formats defaultFormat = Formats::PreferPunctuation
                                     | Formats::FillFromCenter
                                     | Formats::FillFromLeft

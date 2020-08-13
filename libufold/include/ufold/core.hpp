@@ -17,7 +17,7 @@
 
 /**
  * @file ufold/core.hpp
- * @brief some core utilities used by the library
+ * @brief Some core utilities used by the library
  * @author Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
  * @date 2020-08-13
  * @copyright GPL-3+
@@ -36,7 +36,7 @@ template<typename _Enum>
 constexpr auto underlying_cast(const _Enum a) noexcept;
 
 /**
- * @brief add some operator overloads to use an `enum` as a flag
+ * @brief Add some operator overloads to use an `enum` as a flag
  * @param T the `enum` to which the operators are added
  */
 #define UFOLD_ADD_FLAGS_OP(T)                                        \
