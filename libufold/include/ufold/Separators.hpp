@@ -28,6 +28,7 @@
 
 #include <map>
 
+/// Namespace of libufold
 namespace ufold
 {
 
