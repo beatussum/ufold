@@ -19,7 +19,7 @@ project("lib${CMAKE_PROJECT_NAME}"
 
 set(LIBUFOLD_HPP
     include/ufold/core.hpp
-    include/ufold/Format.hpp
+    include/ufold/Formats.hpp
     include/ufold/Separators.hpp)
 set(LIBUFOLD_IPP
     include/ufold/core.ipp)

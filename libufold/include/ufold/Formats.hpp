@@ -16,7 +16,7 @@
  */
 
 /**
- * @file ufold/Format.hpp
+ * @file ufold/Formats.hpp
  * @author Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
  * @date 2020-08-13
  * @copyright GPL-3+
