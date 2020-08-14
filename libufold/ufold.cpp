@@ -110,44 +110,46 @@ namespace ufold
                 return ufold_bad_enum(SeparatorType);
             }
         }
-    }
 
-    // `std::out_of_range` cannot be thrown
-    string fold(const string& in, const spos_t width)
-    {
-        if (in.size() <= width)
-            return in;
+        // `std::out_of_range` cannot be thrown
+        LIBUFOLD_CONST
+        string fold(const string& in, const spos_t width)
+        {
+            if (in.size() <= width)
+                return in;
 
-        auto ret = in;
-        for (auto i = ret.begin() + width; i < ret.end(); i += width) {
-            try {
-                string::const_iterator iter =
-                    std::find_if(std::execution::par,
-                                 std::make_reverse_iterator(i),
-                                 ret.rend(), &isSeparator)
-                    .base();
+            auto ret = in;
+            for (auto i = ret.begin() + width; i < ret.end(); i += width) {
+                try {
+                    string::const_iterator iter =
+                        std::find_if(std::execution::par,
+                                    std::make_reverse_iterator(i),
+                                    ret.rend(), &isSeparator)
+                        .base();
 
-                if (isSpace(*iter)) {
-                    ret.replace(iter, iter++, 1, L'\n');
-                } else {
-                    ret.insert(iter, L'\n');
-                }
-            } catch (...) { ufold_rethrow; }
+                    if (isSpace(*iter)) {
+                        ret.replace(iter, iter++, 1, L'\n');
+                    } else {
+                        ret.insert(iter, L'\n');
+                    }
+                } catch (...) { ufold_rethrow; }
+            }
+
+            return ret;
         }
 
-        return ret;
-    }
+        LIBUFOLD_CONST
+        Separators scanSeparators(const string& in)
+        {
+            Separators sep;
 
-    Separators scanSeparators(const string& in)
-    {
-        Separators sep;
+            for (auto begin = in.begin(), i = begin; i <= in.end(); ++i) {
+                sep.insert(
+                    { std::distance(begin, i), getSeparatorTypeOf(*i) }
+                );
+            }
 
-        for (auto begin = in.begin(), i = begin; i <= in.end(); ++i) {
-            sep.insert(
-                { std::distance(begin, i), getSeparatorTypeOf(*i) }
-            );
+            return sep;
         }
-
-        return sep;
     }
 }

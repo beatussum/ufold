@@ -37,29 +37,6 @@ namespace ufold
 
     /// type of character used by ufold::string
     using char_t = string::value_type;
-
-    /**
-     * @brief Cut a ufold::string to a specific column
-     *
-     * @param[in] in    the input ufold::string
-     * @param[in] width to which column to cut
-     *
-     * @return the \p in string if its size is lower than \p width
-     * @return otherwise, an edited string
-     * @throw std::runtime_error if std::find_if, ufold::string::replace,
-     *        or ufold::string::insert fail
-     */
-    LIBUFOLD_CONST LIBUFOLD_EXPORT
-    string fold(const string& in, const spos_t width);
-
-    /**
-     * @brief Scan all separators of a ufold::string
-     *
-     * @param in the input ufold::string
-     * @return a #Separators
-     */
-    LIBUFOLD_CONST LIBUFOLD_EXPORT
-    Separators scanSeparators(const string& in);
 }
 
 #endif // UFOLD_UFOLD_HPP
