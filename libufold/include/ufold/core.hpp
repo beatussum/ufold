@@ -35,14 +35,18 @@
 #   define LIBUFOLD_CONST
 #endif // __GNUG__
 
-/**
- * @tparam _Enum the `enum` type
- * @param  a     the `enum` constant
- * @return the `enum` constant \p a as its underlying type
- */
-template<typename _Enum>
-LIBUFOLD_CONST LIBUFOLD_EXPORT
-constexpr auto underlying_cast(const _Enum a) noexcept;
+/// Namespace of some core libufold-specific utilities
+namespace ufold::core
+{
+    /**
+     * @tparam    _Enum the `enum` type
+     * @param[in] a     the `enum` constant
+     * @return the `enum` constant \p a as its underlying type
+     */
+    template<typename _Enum>
+    LIBUFOLD_CONST LIBUFOLD_EXPORT
+    constexpr auto underlying_cast(const _Enum a) noexcept;
+}
 
 /**
  * @brief Add some operator overloads to use an `enum` as a flag
@@ -52,6 +56,8 @@ constexpr auto underlying_cast(const _Enum a) noexcept;
 LIBUFOLD_CONST LIBUFOLD_EXPORT                                      \
 constexpr T operator|(const T a, const T b) noexcept                \
 {                                                                   \
+    using ufold::core::underlying_cast;                             \
+                                                                    \
     return static_cast<T>(underlying_cast(a) | underlying_cast(b)); \
 }                                                                   \
                                                                     \
@@ -66,6 +72,8 @@ constexpr T operator|=(T a, const T b) noexcept                     \
 LIBUFOLD_CONST LIBUFOLD_EXPORT                                      \
 constexpr T operator&(const T a, const T b) noexcept                \
 {                                                                   \
+    using ufold::core::underlying_cast;                             \
+                                                                    \
     return static_cast<T>(underlying_cast(a) & underlying_cast(b)); \
 }
 // ADD_FLAGS_OPERATORS(T)

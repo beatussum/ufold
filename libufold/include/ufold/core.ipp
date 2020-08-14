@@ -19,10 +19,13 @@
 #ifndef UFOLD_CORE_IPP
 #define UFOLD_CORE_IPP
 
-template<typename _Enum>
-constexpr auto underlying_cast(const _Enum a) noexcept
+namespace ufold::core
 {
-    return static_cast<std::underlying_type_t<_Enum>>(a);
+    template<typename _Enum>
+    constexpr auto underlying_cast(const _Enum a) noexcept
+    {
+        return static_cast<std::underlying_type_t<_Enum>>(a);
+    }
 }
 
 #endif // UFOLD_CORE_IPP
