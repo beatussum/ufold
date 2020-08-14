@@ -112,26 +112,30 @@ namespace ufold
         }
 
         // `std::out_of_range` cannot be thrown
-        void fold(string& in, const spos_t width)
+        LIBUFOLD_CONST
+        string fold(const string& in, const spos_t width)
         {
             if (in.size() <= width)
-                return;
+                return in;
 
-            for (auto i = in.begin() + width; i < in.end(); i += width) {
+            auto ret = in;
+            for (auto i = ret.begin() + width; i < ret.end(); i += width) {
                 try {
                     string::const_iterator iter =
                         std::find_if(std::execution::par,
-                                     std::make_reverse_iterator(i),
-                                     in.rend(), &isSeparator)
+                                    std::make_reverse_iterator(i),
+                                    ret.rend(), &isSeparator)
                         .base();
 
                     if (isSpace(*iter)) {
-                        in.replace(iter, iter++, 1, L'\n');
+                        ret.replace(iter, iter++, 1, L'\n');
                     } else {
-                        in.insert(iter, L'\n');
+                        ret.insert(iter, L'\n');
                     }
                 } catch (...) { ufold_rethrow; }
             }
+
+            return ret;
         }
 
         LIBUFOLD_CONST
