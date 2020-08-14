@@ -25,7 +25,7 @@ namespace ufold
     namespace
     {
         LIBUFOLD_CONST
-        constexpr bool isRemovableSeparator(const char_t c) noexcept
+        constexpr bool isSpace(const char_t c) noexcept
         {
             switch (c) {
                 case L' ':      // SPACE
@@ -60,7 +60,54 @@ namespace ufold
                 case L'\u2E3B': // THREE-EM DASH
                     return true;
                 default:
-                    return isRemovableSeparator(c);
+                    return isSpace(c);
+            }
+        }
+
+        LIBUFOLD_CONST
+        constexpr bool isPunctuationMark(const char_t c)
+        {
+            switch (c) {
+                case L',':
+                case L';':
+                case L':':
+                case L'?':
+                case L'!':
+                case L'\u203D': // INTERROBANG
+                case L'(':
+                case L')':
+                case L'"':
+                case L'\'':
+                case L'`':
+                case L'\u2018': // LEFT SINGLE QUOTATION MARK
+                case L'\u2019': // RIGHT SINGLE QUOTATION MARK
+                case L'\u201A': // SINGLE LOW-9 QUOTATION MARK
+                case L'\u201B': // SINGLE HIGH-REVERSED-9 QUOTATION MARK
+                case L'\u201C': // LEFT SINGLE QUOTATION MARK
+                case L'\u201D': // RIGHT SINGLE QUOTATION MARK
+                case L'\u201E': // DOUBLE LOW-9 QUOTATION MARK
+                case L'\u201F': // DOUBLE HIGH-REVERSED-9 QUOTATION MARK
+                case L'\u2039': // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+                case L'\u203A': // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+                case L'\u00AB': // DOUBLE LEFT-POINTING ANGLE QUOTATION MARK
+                case L'\u00BB': // DOUBLE RIGHT-POINTING ANGLE QUOTATION MARK
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        LIBUFOLD_CONST
+        constexpr SeparatorType getSeparatorTypeOf(const char_t c)
+        {
+            if (std::iswupper(c)) {
+                return SeparatorType::Capital;
+            } else if (isPunctuationMark(c)) {
+                return SeparatorType::Punctuation;
+            } else if (isSpace(c)) {
+                return SeparatorType::Space;
+            } else {
+                return ufold_bad_enum(SeparatorType);
             }
         }
     }
@@ -72,7 +119,7 @@ namespace ufold
             return in;
 
         auto ret = in;
-        for (auto i = ret.begin(); i < ret.end(); i += width) {
+        for (auto i = ret.begin() + width; i < ret.end(); i += width) {
             try {
                 string::const_iterator iter =
                     std::find_if(std::execution::par,
@@ -80,7 +127,7 @@ namespace ufold
                                  ret.rend(), &isSeparator)
                     .base();
 
-                if (isRemovableSeparator(*iter)) {
+                if (isSpace(*iter)) {
                     ret.replace(iter, iter++, 1, L'\n');
                 } else {
                     ret.insert(iter, L'\n');
@@ -89,5 +136,18 @@ namespace ufold
         }
 
         return ret;
+    }
+
+    Separators scanSeparators(const string& in)
+    {
+        Separators sep;
+
+        for (auto begin = in.begin(), i = begin; i <= in.end(); ++i) {
+            sep.insert(
+                { std::distance(begin, i), getSeparatorTypeOf(*i) }
+            );
+        }
+
+        return sep;
     }
 }
