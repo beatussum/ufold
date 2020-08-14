@@ -65,7 +65,7 @@ namespace ufold
         }
 
         LIBUFOLD_CONST
-        constexpr bool isPunctuationMark(const char_t c)
+        constexpr bool isPunctuationMark(const char_t c) noexcept
         {
             switch (c) {
                 case L',':
@@ -98,7 +98,7 @@ namespace ufold
         }
 
         LIBUFOLD_CONST
-        constexpr SeparatorType getSeparatorTypeOf(const char_t c)
+        constexpr SeparatorType getSeparatorTypeOf(const char_t c) noexcept
         {
             if (std::iswupper(c)) {
                 return SeparatorType::Capital;
