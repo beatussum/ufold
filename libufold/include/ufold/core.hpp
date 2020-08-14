@@ -27,13 +27,9 @@
 #ifndef UFOLD_CORE_HPP
 #define UFOLD_CORE_HPP
 
-#include <iostream>
+#include "libufold_export.hpp"
 
-#ifdef __GNUG__
-#   define LIBUFOLD_CONST [[gnu::const]]
-#else // __GNUG__
-#   define LIBUFOLD_CONST
-#endif // __GNUG__
+#include <iostream>
 
 /// Namespace of some core libufold-specific utilities
 namespace ufold::core
@@ -44,7 +40,7 @@ namespace ufold::core
      * @return an intenger as _Enum
      */
     template<typename _Enum>
-    LIBUFOLD_CONST
+    [[gnu::const]]
     constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> a) noexcept;
 
     /**
@@ -53,7 +49,7 @@ namespace ufold::core
      * @return the `enum` constant \p a as its underlying type
      */
     template<typename _Enum>
-    LIBUFOLD_CONST
+    [[gnu::const]]
     constexpr auto underlying_cast(const _Enum a) noexcept;
 }
 
@@ -62,7 +58,7 @@ namespace ufold::core
  * @param T the `enum` to which the operators are added
  */
 #define UFOLD_ADD_FLAGS_OP(T)                                       \
-LIBUFOLD_CONST LIBUFOLD_EXPORT                                      \
+[[gnu::const]] LIBUFOLD_EXPORT                                      \
 constexpr T operator|(const T a, const T b) noexcept                \
 {                                                                   \
     using ::ufold::core::underlying_cast;                           \
@@ -70,7 +66,7 @@ constexpr T operator|(const T a, const T b) noexcept                \
     return static_cast<T>(underlying_cast(a) | underlying_cast(b)); \
 }                                                                   \
                                                                     \
-LIBUFOLD_CONST LIBUFOLD_EXPORT                                      \
+[[gnu::const]] LIBUFOLD_EXPORT                                      \
 constexpr T operator|=(T a, const T b) noexcept                     \
 {                                                                   \
     a = a | b;                                                      \
@@ -78,7 +74,7 @@ constexpr T operator|=(T a, const T b) noexcept                     \
     return a;                                                       \
 }                                                                   \
                                                                     \
-LIBUFOLD_CONST LIBUFOLD_EXPORT                                      \
+[[gnu::const]] LIBUFOLD_EXPORT                                      \
 constexpr T operator&(const T a, const T b) noexcept                \
 {                                                                   \
     using ::ufold::core::underlying_cast;                           \

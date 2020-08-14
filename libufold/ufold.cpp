@@ -17,6 +17,7 @@
 
 
 #include "ufold/ufold.hpp"
+#include "ufold/Separators.hpp"
 
 #include <execution>
 
@@ -24,7 +25,7 @@ namespace ufold
 {
     namespace
     {
-        LIBUFOLD_CONST
+        [[gnu::const]]
         constexpr bool isSpace(const char_t c) noexcept
         {
             switch (c) {
@@ -49,7 +50,7 @@ namespace ufold
             }
         }
 
-        LIBUFOLD_CONST
+        [[gnu::const]]
         constexpr bool isSeparator(const char_t c) noexcept
         {
             switch (c) {
@@ -64,7 +65,7 @@ namespace ufold
             }
         }
 
-        LIBUFOLD_CONST
+        [[gnu::const]]
         constexpr bool isPunctuationMark(const char_t c) noexcept
         {
             switch (c) {
@@ -97,7 +98,7 @@ namespace ufold
             }
         }
 
-        LIBUFOLD_CONST
+        [[gnu::const]]
         constexpr SeparatorType getSeparatorTypeOf(const char_t c) noexcept
         {
             if (std::iswupper(c)) {
@@ -112,7 +113,7 @@ namespace ufold
         }
 
         // `std::out_of_range` cannot be thrown
-        LIBUFOLD_CONST
+        [[gnu::const]]
         string fold(const string& in, const spos_t width)
         {
             if (in.size() <= width)
@@ -138,7 +139,7 @@ namespace ufold
             return ret;
         }
 
-        LIBUFOLD_CONST
+        [[gnu::const]]
         Separators scanSeparators(const string& in)
         {
             Separators sep;
