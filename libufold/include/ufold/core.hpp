@@ -44,7 +44,7 @@ namespace ufold::core
      * @return an intenger as _Enum
      */
     template<typename _Enum>
-    LIBUFOLD_CONST LIBUFOLD_EXPORT
+    LIBUFOLD_CONST
     constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> a) noexcept;
 
     /**
@@ -53,7 +53,7 @@ namespace ufold::core
      * @return the `enum` constant \p a as its underlying type
      */
     template<typename _Enum>
-    LIBUFOLD_CONST LIBUFOLD_EXPORT
+    LIBUFOLD_CONST
     constexpr auto underlying_cast(const _Enum a) noexcept;
 }
 
