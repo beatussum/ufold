@@ -26,14 +26,11 @@
 #ifndef UFOLD_SEPARATORS_HPP
 #define UFOLD_SEPARATORS_HPP
 
-#include <cstdint>
 #include <map>
 
 /// Namespace of libufold
 namespace ufold
 {
-
-    using spos_t = uint16_t; ///< The type representing line column
     using separator_t = uint8_t; ///< The underlying type of #SeparatorType
 
     /// `enum` of different type of separators
@@ -42,6 +39,8 @@ namespace ufold
         Punctuation,
         Space
     };
+
+    using spos_t = uint16_t; ///< The type representing line column
 
     /// `std::map` of separators with their position and type
     using Separators = std::map<spos_t, SeparatorType>;

@@ -19,8 +19,6 @@
 #ifndef UFOLD_CORE_IPP
 #define UFOLD_CORE_IPP
 
-#include <type_traits>
-
 template<typename _Enum>
 constexpr auto underlying_cast(const _Enum a) noexcept
 {

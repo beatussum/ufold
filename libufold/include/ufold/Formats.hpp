@@ -28,8 +28,6 @@
 
 #include "ufold/core.hpp"
 
-#include <cstdint>
-
 /// Namespace of libufold
 namespace ufold
 {
