@@ -40,6 +40,15 @@ namespace ufold::core
 {
     /**
      * @tparam    _Enum the `enum` type
+     * @param[in] a     an intenger as the underlying type of \p _Enum
+     * @return an intenger as _Enum
+     */
+    template<typename _Enum>
+    LIBUFOLD_CONST LIBUFOLD_EXPORT
+    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> a) noexcept;
+
+    /**
+     * @tparam    _Enum the `enum` type
      * @param[in] a     the `enum` constant
      * @return the `enum` constant \p a as its underlying type
      */
@@ -56,7 +65,7 @@ namespace ufold::core
 LIBUFOLD_CONST LIBUFOLD_EXPORT                                      \
 constexpr T operator|(const T a, const T b) noexcept                \
 {                                                                   \
-    using ufold::core::underlying_cast;                             \
+    using ::ufold::core::underlying_cast;                           \
                                                                     \
     return static_cast<T>(underlying_cast(a) | underlying_cast(b)); \
 }                                                                   \
@@ -72,7 +81,7 @@ constexpr T operator|=(T a, const T b) noexcept                     \
 LIBUFOLD_CONST LIBUFOLD_EXPORT                                      \
 constexpr T operator&(const T a, const T b) noexcept                \
 {                                                                   \
-    using ufold::core::underlying_cast;                             \
+    using ::ufold::core::underlying_cast;                           \
                                                                     \
     return static_cast<T>(underlying_cast(a) & underlying_cast(b)); \
 }
@@ -83,18 +92,25 @@ constexpr T operator&(const T a, const T b) noexcept                \
  * @param level the level of the error
  */
 #define ufold_err_level(level)                           \
-std::cerr << std::string(level * 2, ' ')                 \
+::std::cerr << ::std::string(level * 2, ' ')             \
           << "* ERROR (" << __PRETTY_FUNCTION__ << "): "
 
 /// Print an error message with a level of zero
 #define ufold_err ufold_err_level(0)
 
 /// Call `std::throw_with_nested` with a `std::runtime_error`
-#define ufold_rethrow                                   \
-std::throw_with_nested(                                 \
-    std::runtime_error(std::string(__PRETTY_FUNCTION__) \
-                      + " failed")                      \
+#define ufold_rethrow                                       \
+::std::throw_with_nested(                                   \
+    ::std::runtime_error(::std::string(__PRETTY_FUNCTION__) \
+                          + " failed")                      \
 )
+
+/**
+ * @brief Return a `enum` value without name
+ * @param T the `enum` type
+ */
+#define ufold_bad_enum(T) \
+::ufold::core::enum_cast<T>(-1)
 
 #include "ufold/core.ipp"
 #endif // UFOLD_CORE_HPP

@@ -22,6 +22,12 @@
 namespace ufold::core
 {
     template<typename _Enum>
+    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> a) noexcept
+    {
+        return static_cast<_Enum>(a);
+    }
+
+    template<typename _Enum>
     constexpr auto underlying_cast(const _Enum a) noexcept
     {
         return static_cast<std::underlying_type_t<_Enum>>(a);
