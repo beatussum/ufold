@@ -20,10 +20,12 @@ project("lib${CMAKE_PROJECT_NAME}"
 set(LIBUFOLD_HPP
     include/ufold/core.hpp
     include/ufold/Formats.hpp
-    include/ufold/Separators.hpp)
+    include/ufold/Separators.hpp
+    include/ufold/ufold.hpp)
 set(LIBUFOLD_IPP
     include/ufold/core.ipp)
-set(LIBUFOLD_CPP)
+set(LIBUFOLD_CPP
+    ufold.cpp)
 
 add_library("${PROJECT_NAME}" SHARED
             "${LIBUFOLD_HPP}" "${LIBUFOLD_IPP}" "${LIBUFOLD_CPP}")
