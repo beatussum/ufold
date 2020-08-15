@@ -17,7 +17,6 @@
 
 
 #include "ufold/ufold.hpp"
-#include "ufold/Separators.hpp"
 
 #include <execution>
 
@@ -112,45 +111,66 @@ namespace ufold
             }
         }
 
-        // `std::out_of_range` cannot be thrown
+        using eol_t = std::vector<spos_t>;
+
         [[gnu::const]]
-        string fold(const string& in, const spos_t width)
+        eol_t getVecWithSizeOf(const eol_t::size_type size)
         {
-            if (in.size() <= width)
-                return in;
+            eol_t vec;
+            vec.reserve(size);
 
-            auto ret = in;
-            for (auto i = ret.begin() + width; i < ret.end(); i += width) {
-                try {
-                    string::const_iterator iter =
-                        std::find_if(std::execution::par,
-                                    std::make_reverse_iterator(i),
-                                    ret.rend(), &isSeparator)
-                        .base();
-
-                    if (isSpace(*iter)) {
-                        ret.replace(iter, iter++, 1, L'\n');
-                    } else {
-                        ret.insert(iter, L'\n');
-                    }
-                } catch (...) { ufold_rethrow; }
-            }
-
-            return ret;
+            return vec;
         }
 
         [[gnu::const]]
-        Separators scanSeparators(const string& in)
+        string::size_type getRelativePosition(const string& str, string::const_iterator iter)
         {
+            return std::distance(str.begin(), iter);
+        }
+
+        // `std::out_of_range` cannot be thrown
+        [[gnu::const]]
+        std::pair<eol_t, string> fold(const string& in, const spos_t width)
+        try {
+            const auto size = in.size();
+            auto eol = getVecWithSizeOf((size % width) + 1);
+            auto out = in;
+
+            if (size <= width)
+                goto ret;
+
+            for (auto i = out.begin(); (i += width) < out.end(); ) {
+                string::const_iterator iter =
+                    std::find_if(std::execution::par,
+                                 std::make_reverse_iterator(i),
+                                 out.rend(), &isSeparator)
+                    .base();
+
+                if (isSpace(*iter)) {
+                    out.replace(iter, iter++, 1, L'\n');
+                } else {
+                    out.insert(iter, L'\n');
+                }
+
+                eol.push_back(getRelativePosition(out, i));
+            }
+
+        ret:
+            return std::make_pair(eol, out);
+        } catch (...) { ufold_rethrow; }
+
+        [[gnu::const]]
+        Separators scanSeparators(const string& in)
+        try {
             Separators sep;
 
-            for (auto begin = in.begin(), i = begin; i <= in.end(); ++i) {
+            for (auto i = in.begin(); i <= in.end(); ++i) {
                 sep.insert(
-                    { std::distance(begin, i), getSeparatorTypeOf(*i) }
+                    { getRelativePosition(in, i), getSeparatorTypeOf(*i) }
                 );
             }
 
             return sep;
-        }
+        } catch (...) { ufold_rethrow; }
     }
 }

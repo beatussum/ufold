@@ -27,6 +27,7 @@
 #define UFOLD_UFOLD_HPP
 
 #include "ufold/Formats.hpp"
+#include "ufold/Separators.hpp"
 
 namespace ufold
 {
