@@ -111,66 +111,50 @@ namespace ufold
             }
         }
 
-        using eol_t = std::vector<spos_t>;
-
         [[gnu::const]]
-        eol_t getVecWithSizeOf(const eol_t::size_type size)
+        string::size_type distance(const string& first, const string::const_iterator last)
         {
-            eol_t vec;
-            vec.reserve(size);
+            using std::distance;
 
-            return vec;
+            return distance(first.cbegin(), last);
         }
-
-        [[gnu::const]]
-        string::size_type getRelativePosition(const string& str, string::const_iterator iter)
-        {
-            return std::distance(str.begin(), iter);
-        }
-
-        // `std::out_of_range` cannot be thrown
-        [[gnu::const]]
-        std::pair<eol_t, string> fold(const string& in, const spos_t width)
-        try {
-            const auto size = in.size();
-            auto eol = getVecWithSizeOf((size % width) + 1);
-            auto out = in;
-
-            if (size <= width)
-                goto ret;
-
-            for (auto i = out.begin(); (i += width) < out.end(); ) {
-                string::const_iterator iter =
-                    std::find_if(std::execution::par,
-                                 std::make_reverse_iterator(i),
-                                 out.rend(), &isSeparator)
-                    .base();
-
-                if (isSpace(*iter)) {
-                    out.replace(iter, iter++, 1, L'\n');
-                } else {
-                    out.insert(iter, L'\n');
-                }
-
-                eol.push_back(getRelativePosition(out, i));
-            }
-
-        ret:
-            return std::make_pair(eol, out);
-        } catch (...) { ufold_rethrow; }
 
         [[gnu::const]]
         Separators scanSeparators(const string& in)
         try {
             Separators sep;
 
-            for (auto i = in.begin(); i <= in.end(); ++i) {
+            for (auto i = in.cbegin(); i <= in.cend(); ++i) {
                 sep.insert(
-                    { getRelativePosition(in, i), getSeparatorTypeOf(*i) }
+                    { distance(in, i), getSeparatorTypeOf(*i) }
                 );
             }
 
             return sep;
         } catch (...) { ufold_rethrow; }
     }
+
+    // `std::out_of_range` cannot be thrown
+    string fold(const string& in, const spos_t width)
+    try {
+        if (in.size() <= width)
+            return in;
+
+        auto out = in;
+        for (auto i = out.begin(); (i += width) < out.end(); ) {
+            const auto iter =
+                std::find_if(std::execution::par,
+                             std::make_reverse_iterator(i),
+                             out.rend(), &isSeparator)
+                .base();
+
+            if (isSpace(*iter)) {
+                *iter = L'\n';
+            } else {
+                out.insert(iter, L'\n');
+            }
+        }
+
+        return out;
+    } catch (...) { ufold_rethrow; }
 }
