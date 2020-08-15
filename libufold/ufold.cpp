@@ -165,7 +165,7 @@ namespace ufold
     } catch (...) { ufold_rethrow; }
 
     stringv_vec split(const string& in)
-    {
+    try {
         stringv_vec ret;
 
         const_iterator first;
@@ -180,5 +180,5 @@ namespace ufold
             addStringView(ret, first, in.cend());
 
         return ret;
-    }
+    } catch (...) { ufold_rethrow; }
 }
