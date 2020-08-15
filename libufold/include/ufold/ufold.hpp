@@ -54,6 +54,16 @@ namespace ufold
      */
     [[gnu::const]] LIBUFOLD_EXPORT
     Separators scanSeparators(const string& in);
+
+    /**
+     * @brief Split a ufold::string separated by '\n' of a vector
+     *        of ufold::string_view
+     *
+     * @param in the input ufold::string
+     * @return a ufold::stringv_vec
+     */
+    [[gnu::const]] LIBUFOLD_EXPORT
+    stringv_vec split(const string& in);
 }
 
 #endif // UFOLD_UFOLD_HPP

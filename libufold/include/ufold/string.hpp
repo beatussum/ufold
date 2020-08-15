@@ -26,13 +26,15 @@
 #ifndef UFOLD_STRING_HPP
 #define UFOLD_STRING_HPP
 
+#include <vector>
+
 /// Namespace of libufold
 namespace ufold
 {
     /// std::basic_string used by libufold
     using string = std::wstring;
 
-    /// type of character used by ufold::string
+    /// Type of character used by ufold::string
     using char_t = string::value_type;
 
     /// const_iterator used by ufold::string
@@ -40,6 +42,12 @@ namespace ufold
 
     /// The type representing line column
     using size_t = string::size_type;
+
+    /// std::string_view of type ufold::char_t
+    using string_view = std::basic_string_view<char_t>;
+
+    /// std::vector of ufold::string_view
+    using stringv_vec = std::vector<string_view>;
 }
 
 #endif // UFOLD_STRING_HPP

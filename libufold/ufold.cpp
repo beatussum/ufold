@@ -118,6 +118,13 @@ namespace ufold
 
             return distance(first.cbegin(), last);
         }
+
+        void addStringView(stringv_vec& vec, const_iterator first, const_iterator last)
+        {
+            vec.push_back(
+                string_view(&*first, distance(first, last) - 1)
+            );
+        }
     }
 
     // `std::out_of_range` cannot be thrown
@@ -156,4 +163,22 @@ namespace ufold
 
         return sep;
     } catch (...) { ufold_rethrow; }
+
+    stringv_vec split(const string& in)
+    {
+        stringv_vec ret;
+
+        const_iterator first;
+        for (auto i = first = in.cbegin(); i <= in.cend(); ++i) {
+            if (*i == '\n') {
+                addStringView(ret, first, i);
+                first = i + 1;
+            }
+        }
+
+        if (first != in.cend())
+            addStringView(ret, first, in.cend());
+
+        return ret;
+    }
 }
