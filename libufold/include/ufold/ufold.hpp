@@ -29,13 +29,9 @@
 #include "ufold/Formats.hpp"
 #include "ufold/Separators.hpp"
 
+/// Namespace of libufold
 namespace ufold
 {
-    using string = std::wstring; ///< std::basic_string used by libufold
-
-    /// type of character used by ufold::string
-    using char_t = string::value_type;
-
     /**
      * @brief Cut a ufold::string to a specific column
      *
@@ -48,7 +44,16 @@ namespace ufold
      *        or ufold::string::insert fail
      */
     [[gnu::const]] LIBUFOLD_EXPORT
-    string fold(const string& in, const spos_t width);
+    string fold(const string& in, const size_t width);
+
+    /**
+     * @brief Scan all separators of a ufold::string
+     *
+     * @param in the input ufold::string
+     * @return a #Separators
+     */
+    [[gnu::const]] LIBUFOLD_EXPORT
+    Separators scanSeparators(const string& in);
 }
 
 #endif // UFOLD_UFOLD_HPP

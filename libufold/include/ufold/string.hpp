@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2020 Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
  *
  * This program is free software:  you can redistribute it and/or modify
@@ -16,35 +16,30 @@
  */
 
 /**
- * @file ufold/Separators.hpp
+ * @file ufold/string.hpp
  * @author Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
  * @date 2020-08-13
  * @copyright GPL-3+
  */
 
 
-#ifndef UFOLD_SEPARATORS_HPP
-#define UFOLD_SEPARATORS_HPP
-
-#include "ufold/string.hpp"
-
-#include <map>
+#ifndef UFOLD_STRING_HPP
+#define UFOLD_STRING_HPP
 
 /// Namespace of libufold
 namespace ufold
 {
-    /// The underlying type of #SeparatorType
-    using separator_t = uint8_t;
+    /// std::basic_string used by libufold
+    using string = std::wstring;
 
-    /// `enum` of different type of separators
-    enum class SeparatorType : separator_t {
-        Capital,
-        Punctuation,
-        Space
-    };
+    /// type of character used by ufold::string
+    using char_t = string::value_type;
 
-    /// `std::map` of separators with their position and type
-    using Separators = std::map<size_t, SeparatorType>;
+    /// const_iterator used by ufold::string
+    using const_iterator = string::const_iterator;
+
+    /// The type representing line column
+    using size_t = string::size_type;
 }
 
-#endif // UFOLD_SEPARATORS_HPP
+#endif // UFOLD_STRING_HPP

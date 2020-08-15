@@ -112,30 +112,16 @@ namespace ufold
         }
 
         [[gnu::const]]
-        string::size_type distance(const string& first, const string::const_iterator last)
+        size_t distance(const string& first, const const_iterator last)
         {
             using std::distance;
 
             return distance(first.cbegin(), last);
         }
-
-        [[gnu::const]]
-        Separators scanSeparators(const string& in)
-        try {
-            Separators sep;
-
-            for (auto i = in.cbegin(); i <= in.cend(); ++i) {
-                sep.insert(
-                    { distance(in, i), getSeparatorTypeOf(*i) }
-                );
-            }
-
-            return sep;
-        } catch (...) { ufold_rethrow; }
     }
 
     // `std::out_of_range` cannot be thrown
-    string fold(const string& in, const spos_t width)
+    string fold(const string& in, const size_t width)
     try {
         if (in.size() <= width)
             return in;
@@ -156,5 +142,18 @@ namespace ufold
         }
 
         return out;
+    } catch (...) { ufold_rethrow; }
+
+    Separators scanSeparators(const string& in)
+    try {
+        Separators sep;
+
+        for (auto i = in.cbegin(); i <= in.cend(); ++i) {
+            sep.insert(
+                { distance(in, i), getSeparatorTypeOf(*i) }
+            );
+        }
+
+        return sep;
     } catch (...) { ufold_rethrow; }
 }
