@@ -94,7 +94,7 @@ constexpr T operator&(const T a, const T b) noexcept                \
 /// Print an error message with a level of zero
 #define ufold_err ufold_err_level(0)
 
-/// Call `std::throw_with_nested` with a `std::runtime_error`
+/// Call std::throw_with_nested with a std::runtime_error
 #define ufold_rethrow                                       \
 ::std::throw_with_nested(                                   \
     ::std::runtime_error(::std::string(__PRETTY_FUNCTION__) \
