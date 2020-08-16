@@ -44,7 +44,7 @@ namespace ufold
      *        or ufold::string::insert fail
      */
     [[gnu::const]] LIBUFOLD_EXPORT
-    string fold(const string& in, const size_t width);
+    string fold(const string& in, const string::size_type width);
 
     /**
      * @brief Scan all separators of a ufold::string

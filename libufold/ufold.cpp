@@ -18,10 +18,12 @@
 
 #include "ufold/ufold.hpp"
 
-#include <execution>
+#include <cwctype>
 
 namespace ufold
 {
+    using namespace core;
+
     namespace
     {
         [[gnu::const]]
@@ -111,15 +113,7 @@ namespace ufold
             }
         }
 
-        [[gnu::const]]
-        size_t distance(const string& first, const const_iterator last)
-        {
-            using std::distance;
-
-            return distance(first.cbegin(), last);
-        }
-
-        void addStringView(stringv_vec& vec, const_iterator first, const_iterator last)
+        void addStringView(stringv_vec& vec, const string::const_iterator& first, const string::const_iterator& last)
         {
             vec.push_back(
                 string_view(&*first, distance(first, last) - 1)
@@ -128,20 +122,26 @@ namespace ufold
     }
 
     // `std::out_of_range` cannot be thrown
-    string fold(const string& in, const size_t width)
+    string fold(const string& in, const string::size_type width)
     try {
-        if (in.size() <= width)
+        const auto size = in.size();
+
+        if (size <= width)
             return in;
+
+        auto futures = make_vector<strit_future>((size % width) + 1);
 
         auto out = in;
         for (auto i = out.begin(); (i += width) < out.end(); ) {
-            const auto iter =
-                std::find_if(std::execution::par,
-                             std::make_reverse_iterator(i),
-                             out.rend(), &isSeparator)
-                .base();
+            futures.push_back(
+                async_find_if(std::make_reverse_iterator(i),
+                              out.rbegin(),
+                              &isSeparator)
+            );
+        }
 
-            if (isSpace(*iter)) {
+        for (auto& i : futures) {
+            if (auto iter = i.get(); isSpace(*iter)) {
                 *iter = L'\n';
             } else {
                 out.insert(iter, L'\n');
@@ -168,7 +168,7 @@ namespace ufold
     try {
         stringv_vec ret;
 
-        const_iterator first;
+        string::const_iterator first;
         for (auto i = first = in.cbegin(); i <= in.cend(); ++i) {
             if (*i == '\n') {
                 addStringView(ret, first, i);

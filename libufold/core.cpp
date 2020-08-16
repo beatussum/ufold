@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2020 Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
  *
  * This program is free software:  you can redistribute it and/or modify
@@ -15,36 +15,15 @@
  * with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @file ufold/Separators.hpp
- * @author Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
- * @date 2020-08-13
- * @copyright GPL-3+
- */
 
+#include "ufold/core.hpp"
 
-#ifndef UFOLD_SEPARATORS_HPP
-#define UFOLD_SEPARATORS_HPP
-
-#include "ufold/types.hpp"
-
-#include <map>
-
-/// Namespace of libufold
-namespace ufold
+namespace ufold::core
 {
-    /// The underlying type of #SeparatorType
-    using separator_type_t = uint8_t;
+    string::difference_type distance(const string& first, const string::const_iterator& last)
+    {
+        using std::distance;
 
-    /// `enum` of different type of separators
-    enum class SeparatorType : separator_type_t {
-        Capital,
-        Punctuation,
-        Space
-    };
-
-    /// `std::map` of separators with their position and type
-    using Separators = std::map<string::size_type, SeparatorType>;
+        return distance(first.cbegin(), last);
+    }
 }
-
-#endif // UFOLD_SEPARATORS_HPP

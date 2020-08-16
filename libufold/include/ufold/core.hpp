@@ -28,29 +28,31 @@
 #define UFOLD_CORE_HPP
 
 #include "libufold_export.hpp"
+#include "ufold/types.hpp"
 
-#include <iostream>
-
-/// Namespace of some core libufold-specific utilities
+/**
+ * @brief Namespace of some core libufold-specific utilities
+ * @note This namespace should not be used outside of libufold
+ */
 namespace ufold::core
 {
-    /**
-     * @tparam    _Enum the `enum` type
-     * @param[in] a     an intenger as the underlying type of \p _Enum
-     * @return an intenger as _Enum
-     */
-    template<typename _Enum>
+    template<class _UnaryPredicate>
     [[gnu::const]]
-    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> a) noexcept;
+    strit_future async_find_if(const string::reverse_iterator& rfirst,
+                               const string::reverse_iterator& rlast,
+                               _UnaryPredicate p);
 
-    /**
-     * @tparam    _Enum the `enum` type
-     * @param[in] a     the `enum` constant
-     * @return the `enum` constant \p a as its underlying type
-     */
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    string::difference_type distance(const string& first,
+                                     const string::const_iterator& last);
+
     template<typename _Enum>
     [[gnu::const]]
-    constexpr auto underlying_cast(const _Enum a) noexcept;
+    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> value) noexcept;
+
+    template<typename _Enum>
+    [[gnu::const]]
+    constexpr auto underlying_cast(const _Enum constant) noexcept;
 }
 
 /**

@@ -19,18 +19,39 @@
 #ifndef UFOLD_CORE_IPP
 #define UFOLD_CORE_IPP
 
+#include <algorithm>
+
 namespace ufold::core
 {
-    template<typename _Enum>
-    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> a) noexcept
+    template<class _UnaryPredicate>
+    strit_future async_find_if(const string::reverse_iterator& rfirst, const string::reverse_iterator& rlast, _UnaryPredicate p)
     {
-        return static_cast<_Enum>(a);
+        return std::async(
+            [&] () -> const string::iterator {
+                return std::find_if(rfirst, rlast, p).base();
+            }
+        );
     }
 
     template<typename _Enum>
-    constexpr auto underlying_cast(const _Enum a) noexcept
+    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> value) noexcept
     {
-        return static_cast<std::underlying_type_t<_Enum>>(a);
+        return static_cast<_Enum>(value);
+    }
+
+    template<class T>
+    std::vector<T> make_vector(const typename std::vector<T>::size_type size)
+    {
+        std::vector<T> vec;
+        vec.reserve(size);
+
+        return vec;
+    }
+
+    template<typename _Enum>
+    constexpr auto underlying_cast(const _Enum constant) noexcept
+    {
+        return static_cast<std::underlying_type_t<_Enum>>(constant);
     }
 }
 

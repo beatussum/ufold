@@ -23,31 +23,27 @@
  */
 
 
-#ifndef UFOLD_STRING_HPP
-#define UFOLD_STRING_HPP
+#ifndef UFOLD_TYPES_HPP
+#define UFOLD_TYPES_HPP
 
+#include <future>
 #include <vector>
 
 /// Namespace of libufold
 namespace ufold
 {
-    /// std::basic_string used by libufold
-    using string = std::wstring;
-
     /// Type of character used by ufold::string
-    using char_t = string::value_type;
+    using char_t = wchar_t;
 
-    /// const_iterator used by ufold::string
-    using const_iterator = string::const_iterator;
+    /// std::basic_string used by libufold
+    using string = std::basic_string<char_t>;
 
-    /// The type representing line column
-    using size_t = string::size_type;
+    using strit_future = std::future<const string::iterator>;
 
-    /// std::string_view of type ufold::char_t
+    /// std::string_view used by libufold
     using string_view = std::basic_string_view<char_t>;
 
-    /// std::vector of ufold::string_view
     using stringv_vec = std::vector<string_view>;
 }
 
-#endif // UFOLD_STRING_HPP
+#endif // UFOLD_TYPES_HPP
