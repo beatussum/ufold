@@ -19,6 +19,7 @@
 #include "ufold/ufold.hpp"
 
 #include <cwctype>
+#include <execution>
 
 namespace ufold
 {
@@ -113,10 +114,10 @@ namespace ufold
             }
         }
 
-        void addStringView(stringv_vec& vec, const string::const_iterator first, const string::const_iterator last)
+        void push_backsv(stringv_vec& vec, const string::const_iterator first, const string::const_iterator last)
         {
             vec.push_back(
-                string_view(&*first, distance(first, last) - 1)
+                string_view(&*first, distance(first, last))
             );
         }
     }
@@ -162,18 +163,20 @@ namespace ufold
 
     stringv_vec split(const string& in)
     try {
+        using namespace std::execution;
+
         stringv_vec ret;
 
         string::const_iterator first;
-        for (auto i = first = in.cbegin(); i <= in.cend(); ++i) {
-            if (*i == '\n') {
-                addStringView(ret, first, i);
-                first = i + 1;
-            }
+        for ( auto last = first = in.cbegin()
+            ; (last = std::find(par, last, in.cend(), '\n')) != in.cend()
+            ;)
+        {
+            push_backsv(ret, first, last - 1);
+            ++first = last;
         }
 
-        if (first != in.cend())
-            addStringView(ret, first, in.cend());
+        push_backsv(ret, first, in.cend());
 
         return ret;
     } catch (...) { ufold_rethrow; }
