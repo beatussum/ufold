@@ -113,7 +113,7 @@ namespace ufold
             }
         }
 
-        void addStringView(stringv_vec& vec, const string::const_iterator& first, const string::const_iterator& last)
+        void addStringView(stringv_vec& vec, const string::const_iterator first, const string::const_iterator last)
         {
             vec.push_back(
                 string_view(&*first, distance(first, last) - 1)
@@ -122,36 +122,32 @@ namespace ufold
     }
 
     // `std::out_of_range` cannot be thrown
-    string fold(const string& in, const string::size_type width)
-    try {
-        const auto size = in.size();
+    string fold(string str, const string::size_type width)
+    {
+        if (const auto size = str.size(); size > width) try {
+            auto futures = make_vector<strit_future>((size % width) + 1);
 
-        if (size <= width)
-            return in;
-
-        auto futures = make_vector<strit_future>((size % width) + 1);
-
-        auto out = in;
-        for (auto i = out.begin(); (i += width) < out.end(); ) {
-            futures.push_back(
-                async_find_if(std::make_reverse_iterator(i),
-                              out.rbegin(),
-                              &isSeparator)
-            );
-        }
-
-        for (auto& i : futures) {
-            if (auto iter = i.get(); isSpace(*iter)) {
-                *iter = L'\n';
-            } else {
-                out.insert(iter, L'\n');
+            for (auto i = str.begin(); (i += width) < str.end(); ) {
+                futures.push_back(
+                    async_find_if(std::make_reverse_iterator(i),
+                                  str.rbegin(),
+                                  &isSeparator)
+                );
             }
-        }
 
-        return out;
-    } catch (...) { ufold_rethrow; }
+            for (auto& i : futures) {
+                if (auto iter = i.get(); isSpace(*iter)) {
+                    *iter = L'\n';
+                } else {
+                    str.insert(iter, L'\n');
+                }
+            }
+        } catch (...) { ufold_rethrow; }
 
-    Separators scanSeparators(const string& in)
+        return str;
+    }
+
+    Separators scanSeparators(const string_view in)
     try {
         Separators sep;
 

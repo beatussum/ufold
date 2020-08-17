@@ -35,25 +35,25 @@ namespace ufold
     /**
      * @brief Cut a ufold::string to a specific column
      *
-     * @param[in] in    the input ufold::string
+     * @param[in] str   the input ufold::string
      * @param[in] width to which column to cut
      *
-     * @return the \p in string if its size is lower than \p width
+     * @return the \p str string if its size is lower than \p width
      * @return otherwise, an edited string
      * @throw std::runtime_error if std::find_if, ufold::string::replace,
      *        or ufold::string::insert fail
      */
     [[gnu::const]] LIBUFOLD_EXPORT
-    string fold(const string& in, const string::size_type width);
+    string fold(string str, const string::size_type width);
 
     /**
      * @brief Scan all separators of a ufold::string
      *
-     * @param in the input ufold::string
+     * @param in the input ufold::string_view
      * @return a #Separators
      */
     [[gnu::const]] LIBUFOLD_EXPORT
-    Separators scanSeparators(const string& in);
+    Separators scanSeparators(const string_view in);
 
     /**
      * @brief Split a ufold::string separated by '\n' of a vector

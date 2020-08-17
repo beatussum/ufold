@@ -20,7 +20,7 @@
 
 namespace ufold::core
 {
-    string::difference_type distance(const string& first, const string::const_iterator& last)
+    string::difference_type distance(const string_view first, const string_view::const_iterator last)
     {
         using std::distance;
 

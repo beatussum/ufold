@@ -24,7 +24,7 @@
 namespace ufold::core
 {
     template<class _UnaryPredicate>
-    strit_future async_find_if(const string::reverse_iterator& rfirst, const string::reverse_iterator& rlast, _UnaryPredicate p)
+    strit_future async_find_if(const string::reverse_iterator rfirst, const string::reverse_iterator rlast, _UnaryPredicate p)
     {
         return std::async(
             [&] () -> const string::iterator {

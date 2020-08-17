@@ -38,13 +38,13 @@ namespace ufold::core
 {
     template<class _UnaryPredicate>
     [[gnu::const]]
-    strit_future async_find_if(const string::reverse_iterator& rfirst,
-                               const string::reverse_iterator& rlast,
+    strit_future async_find_if(const string::reverse_iterator rfirst,
+                               const string::reverse_iterator rlast,
                                _UnaryPredicate p);
 
     [[gnu::const]] LIBUFOLD_NO_EXPORT
-    string::difference_type distance(const string& first,
-                                     const string::const_iterator& last);
+    string::difference_type distance(const string_view first,
+                                     const string_view::const_iterator last);
 
     template<typename _Enum>
     [[gnu::const]]
