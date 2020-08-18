@@ -70,7 +70,7 @@ namespace ufold::core
  * @param T the `enum` to which the operators are added
  */
 #define UFOLD_ADD_FLAGS_OP(T)                                       \
-[[gnu::const]] LIBUFOLD_EXPORT                                      \
+[[gnu::const]] LIBUFOLD_NO_EXPORT                                   \
 constexpr T operator|(const T a, const T b) noexcept                \
 {                                                                   \
     using ::ufold::core::underlying_cast;                           \
@@ -78,7 +78,7 @@ constexpr T operator|(const T a, const T b) noexcept                \
     return static_cast<T>(underlying_cast(a) | underlying_cast(b)); \
 }                                                                   \
                                                                     \
-[[gnu::const]] LIBUFOLD_EXPORT                                      \
+[[gnu::const]] LIBUFOLD_NO_EXPORT                                   \
 constexpr T operator|=(T a, const T b) noexcept                     \
 {                                                                   \
     a = a | b;                                                      \
@@ -86,7 +86,7 @@ constexpr T operator|=(T a, const T b) noexcept                     \
     return a;                                                       \
 }                                                                   \
                                                                     \
-[[gnu::const]] LIBUFOLD_EXPORT                                      \
+[[gnu::const]] LIBUFOLD_NO_EXPORT                                   \
 constexpr T operator&(const T a, const T b) noexcept                \
 {                                                                   \
     using ::ufold::core::underlying_cast;                           \
