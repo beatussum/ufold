@@ -58,7 +58,7 @@ namespace ufold::core
     [[gnu::const]]
     _InputIt find_first_not_of(const _InputIt first,
                                const _InputIt last,
-                               const T& value);
+                               T&& value);
 
     template<typename _Enum>
     [[gnu::const]]
@@ -99,9 +99,9 @@ constexpr T operator&(const T a, const T b) noexcept                \
  * @brief Print an error message
  * @param level the level of the error
  */
-#define ufold_err_level(level)                           \
-::std::cerr << ::std::string(level * 2, ' ')             \
-          << "* ERROR (" << __PRETTY_FUNCTION__ << "): "
+#define ufold_err_level(level)                             \
+::std::cerr << ::std::string(level * 2, ' ')               \
+            << "* ERROR (" << __PRETTY_FUNCTION__ << "): "
 
 /// Print an error message with a level of zero
 #define ufold_err ufold_err_level(0)
@@ -110,7 +110,7 @@ constexpr T operator&(const T a, const T b) noexcept                \
 #define ufold_rethrow                                       \
 ::std::throw_with_nested(                                   \
     ::std::runtime_error(::std::string(__PRETTY_FUNCTION__) \
-                          + " failed")                      \
+                         + " failed")                       \
 )
 
 /**

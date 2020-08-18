@@ -41,7 +41,7 @@ namespace ufold::core
     }
 
     template<class _InputIt, class T>
-    _InputIt find_first_not_of(const _InputIt first, const _InputIt last, const T& value)
+    _InputIt find_first_not_of(const _InputIt first, const _InputIt last, T&& value)
     {
         return std::adjacent_find(std::execution::par, first, last,
             [&] (const T& a, const T& b) {
