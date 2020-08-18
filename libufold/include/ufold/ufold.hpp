@@ -64,6 +64,16 @@ namespace ufold
      */
     [[gnu::const]] LIBUFOLD_EXPORT
     stringv_vec split(const string& in);
+
+    /**
+     * @brief Clean the repetitive character at the ufold::string_view
+     *        extremities
+     *
+     * @param in the input ufold::string_view
+     * @return \p in edited less a prefix and suffix
+     */
+    [[gnu::const]] LIBUFOLD_EXPORT
+    string_view cleanOut(string_view in);
 }
 
 #endif // UFOLD_UFOLD_HPP

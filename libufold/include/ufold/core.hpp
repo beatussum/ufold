@@ -46,9 +46,19 @@ namespace ufold::core
     string::difference_type distance(const string_view first,
                                      const string_view::const_iterator last);
 
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    string::difference_type distance(const string_view rfirst,
+                                     const string_view::const_reverse_iterator rlast);
+
     template<typename _Enum>
     [[gnu::const]]
     constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> value) noexcept;
+
+    template<class _InputIt, class T>
+    [[gnu::const]]
+    _InputIt find_first_not_of(const _InputIt first,
+                               const _InputIt last,
+                               const T& value);
 
     template<typename _Enum>
     [[gnu::const]]

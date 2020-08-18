@@ -26,4 +26,11 @@ namespace ufold::core
 
         return distance(first.cbegin(), last);
     }
+
+    string::difference_type distance(const string_view rfirst, const string_view::const_reverse_iterator rlast)
+    {
+        using std::distance;
+
+        return distance(rfirst.crbegin(), rlast);
+    }
 }

@@ -20,6 +20,7 @@
 #define UFOLD_CORE_IPP
 
 #include <algorithm>
+#include <execution>
 
 namespace ufold::core
 {
@@ -37,6 +38,16 @@ namespace ufold::core
     constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> value) noexcept
     {
         return static_cast<_Enum>(value);
+    }
+
+    template<class _InputIt, class T>
+    _InputIt find_first_not_of(const _InputIt first, const _InputIt last, const T& value)
+    {
+        return std::adjacent_find(std::execution::par, first, last,
+            [&] (const T& a, const T& b) {
+                return (a != b) && (a == value);
+            }
+        ) + 1;
     }
 
     template<class T>

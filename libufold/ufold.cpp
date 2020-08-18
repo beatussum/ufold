@@ -19,7 +19,6 @@
 #include "ufold/ufold.hpp"
 
 #include <cwctype>
-#include <execution>
 
 namespace ufold
 {
@@ -124,8 +123,8 @@ namespace ufold
 
     // `std::out_of_range` cannot be thrown
     string fold(string str, const string::size_type width)
-    {
-        if (const auto size = str.size(); size > width) try {
+    try {
+        if (const auto size = str.size(); size > width) {
             auto futures = make_vector<strit_future>((size % width) + 1);
 
             for (auto i = str.begin(); (i += width) < str.end(); ) {
@@ -143,10 +142,10 @@ namespace ufold
                     str.insert(iter, L'\n');
                 }
             }
-        } catch (...) { ufold_rethrow; }
+        }
 
         return str;
-    }
+    } catch (...) { ufold_rethrow; }
 
     Separators scanSeparators(const string_view in)
     try {
@@ -179,5 +178,26 @@ namespace ufold
         push_backsv(ret, first, in.cend());
 
         return ret;
+    } catch (...) { ufold_rethrow; }
+
+    string_view cleanOut(string_view str)
+    try {
+        const auto value = str.front();
+
+        if (const auto iter =
+                find_first_not_of(str.cbegin(), str.cend(), value)
+           ; iter != str.cend())
+        {
+            str.remove_prefix(distance(str, iter));
+        }
+
+        if (const auto iter =
+                find_first_not_of(str.crbegin(), str.crend(), value)
+           ; iter != str.crend())
+        {
+            str.remove_suffix(distance(str, iter));
+        }
+
+        return str;
     } catch (...) { ufold_rethrow; }
 }
