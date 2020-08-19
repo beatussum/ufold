@@ -24,24 +24,40 @@
 
 namespace ufold::core
 {
-    template<class _UnaryPredicate>
-    strit_future async_find_if(const string::reverse_iterator rfirst, const string::reverse_iterator rlast, _UnaryPredicate p)
+    template<class _InputIt, class _UnaryPredicate>
+    std::future<_InputIt> async_find_if(const _InputIt first, const _InputIt last, const _UnaryPredicate p)
     {
         return std::async(
-            [&] () -> const string::iterator {
-                return std::find_if(rfirst, rlast, p).base();
+            [=] () -> _InputIt {
+                return std::find_if(first, last, p);
             }
         );
     }
 
+    template<class _Container>
+    typename _Container::difference_type distance(const _Container& first, const typename _Container::const_iterator last)
+    {
+        using std::distance;
+
+        return distance(first.cbegin(), last);
+    }
+
+    template<class _Container>
+    typename _Container::difference_type distance(const _Container& rfirst, const typename _Container::const_reverse_iterator rlast)
+    {
+        using std::distance;
+
+        return distance(rfirst.crbegin(), rlast);
+    }
+
     template<typename _Enum>
-    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> value) noexcept
+    constexpr auto enum_cast(const std::underlying_type_t<_Enum> value) noexcept
     {
         return static_cast<_Enum>(value);
     }
 
     template<class _InputIt, class T>
-    _InputIt find_first_not_of(const _InputIt first, const _InputIt last, T&& value)
+    _InputIt find_first_not_of(const _InputIt first, const _InputIt last, const T& value)
     {
         return std::adjacent_find(std::execution::par, first, last,
             [&] (const T& a, const T& b) {
@@ -51,7 +67,7 @@ namespace ufold::core
     }
 
     template<class T>
-    std::vector<T> make_vector(const typename std::vector<T>::size_type size)
+    auto make_vector(const typename std::vector<T>::size_type size)
     {
         std::vector<T> vec;
         vec.reserve(size);

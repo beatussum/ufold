@@ -125,7 +125,9 @@ namespace ufold
     string fold(string str, const string::size_type width)
     try {
         if (const auto size = str.size(); size > width) {
-            auto futures = make_vector<strit_future>((size % width) + 1);
+            using future_t = std::future<string::reverse_iterator>;
+
+            auto futures = make_vector<future_t>((size % width) + 1);
 
             for (auto i = str.begin(); (i += width) < str.end(); ) {
                 futures.push_back(
@@ -136,7 +138,10 @@ namespace ufold
             }
 
             for (auto& i : futures) {
-                if (auto iter = i.get(); isSpace(*iter)) {
+                if ( const auto iter = i.get().base()
+                   ; isSpace(*iter)
+                   )
+                {
                     *iter = L'\n';
                 } else {
                     str.insert(iter, L'\n');

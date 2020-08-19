@@ -38,8 +38,6 @@ namespace ufold
     /// std::basic_string used by libufold
     using string = std::basic_string<char_t>;
 
-    using strit_future = std::future<const string::iterator>;
-
     /// std::string_view used by libufold
     using string_view = std::basic_string_view<char_t>;
 

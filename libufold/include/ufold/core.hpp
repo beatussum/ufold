@@ -36,29 +36,35 @@
  */
 namespace ufold::core
 {
-    template<class _UnaryPredicate>
+    template<class _InputIt, class _UnaryPredicate>
     [[gnu::const]]
-    strit_future async_find_if(const string::reverse_iterator rfirst,
-                               const string::reverse_iterator rlast,
-                               _UnaryPredicate p);
+    std::future<_InputIt> async_find_if(const _InputIt first,
+                                        const _InputIt last,
+                                        const _UnaryPredicate p);
 
-    [[gnu::const]] LIBUFOLD_NO_EXPORT
-    string::difference_type distance(const string_view first,
-                                     const string_view::const_iterator last);
+    template<class _Container>
+    [[gnu::const]]
+    typename _Container::difference_type distance(const _Container& first,
+                                                  const typename _Container::const_iterator last);
 
-    [[gnu::const]] LIBUFOLD_NO_EXPORT
-    string::difference_type distance(const string_view rfirst,
-                                     const string_view::const_reverse_iterator rlast);
+    template<class _Container>
+    [[gnu::const]]
+    typename _Container::difference_type distance(const _Container& rfirst,
+                                                  const typename _Container::const_reverse_iterator rlast);
 
     template<typename _Enum>
     [[gnu::const]]
-    constexpr _Enum enum_cast(const std::underlying_type_t<_Enum> value) noexcept;
+    constexpr auto enum_cast(const std::underlying_type_t<_Enum> value) noexcept;
 
     template<class _InputIt, class T>
     [[gnu::const]]
     _InputIt find_first_not_of(const _InputIt first,
                                const _InputIt last,
-                               T&& value);
+                               const T& value);
+
+    template<class T>
+    [[gnu::const]]
+    auto make_vector(const typename std::vector<T>::size_type size);
 
     template<typename _Enum>
     [[gnu::const]]

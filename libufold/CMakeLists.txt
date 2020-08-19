@@ -26,7 +26,6 @@ set(LIBUFOLD_HPP
 set(LIBUFOLD_IPP
     include/ufold/core.ipp)
 set(LIBUFOLD_CPP
-    core.cpp
     ufold.cpp)
 
 add_library("${PROJECT_NAME}" SHARED
