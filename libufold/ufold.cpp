@@ -154,15 +154,18 @@ namespace ufold
 
     Separators scanSeparators(const string_view in)
     try {
-        Separators sep;
+        Separators out;
 
         for (auto i = in.cbegin(); i <= in.cend(); ++i) {
-            sep.insert(
-                { distance(in, i), getSeparatorTypeOf(*i) }
-            );
+            if ( const auto sep = getSeparatorTypeOf(*i)
+               ; sep != ufold_bad_enum(SeparatorType)
+               )
+            {
+                out.insert({ distance(in, i), sep });
+            }
         }
 
-        return sep;
+        return out;
     } catch (...) { ufold_rethrow; }
 
     stringv_vec split(const string& in)
