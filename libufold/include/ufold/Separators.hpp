@@ -34,7 +34,7 @@
 namespace ufold
 {
     /// The underlying type of #SeparatorType
-    using separator_type_t = uint8_t;
+    using separator_type_t = int8_t;
 
     /// `enum` of different type of separators
     enum class SeparatorType : separator_type_t {

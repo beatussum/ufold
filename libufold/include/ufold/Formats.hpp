@@ -32,7 +32,7 @@
 namespace ufold
 {
     /// Underlying type of #Formats
-    using formats_t = uint8_t;
+    using formats_t = int8_t;
 
     /// An `enum` type representing how spaces are added
     enum class Formats : formats_t {
