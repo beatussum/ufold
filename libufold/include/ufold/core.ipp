@@ -37,16 +37,12 @@ namespace ufold::core
     template<class _Container>
     typename _Container::difference_type distance(const _Container& first, const typename _Container::const_iterator last)
     {
-        using std::distance;
-
         return distance(first.cbegin(), last);
     }
 
     template<class _Container>
     typename _Container::difference_type distance(const _Container& rfirst, const typename _Container::const_reverse_iterator rlast)
     {
-        using std::distance;
-
         return distance(rfirst.crbegin(), rlast);
     }
 

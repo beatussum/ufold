@@ -113,10 +113,10 @@ namespace ufold
             }
         }
 
-        void push_backsv(stringv_vec& vec, const string::const_iterator first, const string::const_iterator last)
+        void push_backsv(stringv_vec& vec, const string_view::const_iterator first, const string_view::const_iterator last)
         {
             vec.push_back(
-                string_view(&*first, distance(first, last))
+                string_view(first, distance(first, last))
             );
         }
     }
@@ -168,40 +168,42 @@ namespace ufold
         return out;
     } catch (...) { ufold_rethrow; }
 
-    stringv_vec split(const string& in)
+    stringv_vec split(const string_view in)
     try {
         using namespace std::execution;
 
-        stringv_vec ret;
+        stringv_vec out;
 
-        string::const_iterator first;
+        string_view::const_iterator first;
         for ( auto last = first = in.cbegin()
             ; (last = std::find(par, last, in.cend(), '\n')) != in.cend()
             ;)
         {
-            push_backsv(ret, first, last - 1);
+            push_backsv(out, first, last - 1);
             ++first = last;
         }
 
-        push_backsv(ret, first, in.cend());
+        push_backsv(out, first, in.cend());
 
-        return ret;
+        return out;
     } catch (...) { ufold_rethrow; }
 
     string_view cleanOut(string_view str)
     try {
         const auto value = str.front();
 
-        if (const auto iter =
+        if ( const auto iter =
                 find_first_not_of(str.cbegin(), str.cend(), value)
-           ; iter != str.cend())
+           ; iter != str.cend()
+           )
         {
             str.remove_prefix(distance(str, iter));
         }
 
-        if (const auto iter =
+        if ( const auto iter =
                 find_first_not_of(str.crbegin(), str.crend(), value)
-           ; iter != str.crend())
+           ; iter != str.crend()
+           )
         {
             str.remove_suffix(distance(str, iter));
         }

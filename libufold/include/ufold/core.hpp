@@ -36,6 +36,8 @@
  */
 namespace ufold::core
 {
+    using std::distance;
+
     template<class _InputIt, class _UnaryPredicate>
     [[gnu::const]]
     std::future<_InputIt> async_find_if(const _InputIt first,
