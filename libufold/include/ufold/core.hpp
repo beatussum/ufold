@@ -43,19 +43,26 @@ namespace ufold::core
 
     template<class _InputIt, class _UnaryPredicate>
     [[gnu::const]]
-    std::future<_InputIt> async_find_if(const _InputIt first,
-                                        const _InputIt last,
-                                        const _UnaryPredicate p);
+    std::future<_InputIt> async_find_if( const _InputIt first
+                                       , const _InputIt last
+                                       , const _UnaryPredicate p
+                                       );
+
+    template<typename _Enum>
+    [[gnu::const]]
+    constexpr auto bad_enum() noexcept;
 
     template<class _Container>
     [[gnu::const]]
-    typename _Container::difference_type distance(const _Container& first,
-                                                  const typename _Container::const_iterator last);
+    typename _Container::difference_type distance( const _Container& first
+                                                 , const typename _Container::const_iterator last
+                                                 );
 
     template<class _Container>
     [[gnu::const]]
-    typename _Container::difference_type distance(const _Container& rfirst,
-                                                  const typename _Container::const_reverse_iterator rlast);
+    typename _Container::difference_type distance( const _Container& rfirst
+                                                 , const typename _Container::const_reverse_iterator rlast
+                                                 );
 
     template<typename _Enum>
     [[gnu::const]]
@@ -63,9 +70,10 @@ namespace ufold::core
 
     template<class _InputIt, class T>
     [[gnu::const]]
-    _InputIt find_first_not_of(const _InputIt first,
-                               const _InputIt last,
-                               const T& value);
+    _InputIt find_first_not_of( const _InputIt first
+                              , const _InputIt last
+                              , const T& value
+                              );
 
     template<class T>
     [[gnu::const]]
@@ -106,30 +114,11 @@ constexpr T operator&(const T a, const T b) noexcept                \
 }
 // ADD_FLAGS_OPERATORS(T)
 
-/**
- * @brief Print an error message
- * @param level the level of the error
- */
-#define ufold_err_level(level)                             \
-::std::cerr << ::std::string(level * 2, ' ')               \
-            << "* ERROR (" << __PRETTY_FUNCTION__ << "): "
-
-/// Print an error message with a level of zero
-#define ufold_err ufold_err_level(0)
-
-/// Call std::throw_with_nested with a std::runtime_error
 #define ufold_rethrow                                       \
 ::std::throw_with_nested(                                   \
     ::std::runtime_error(::std::string(__PRETTY_FUNCTION__) \
                          + " failed")                       \
 )
-
-/**
- * @brief Return a `enum` value without name
- * @param T the `enum` type
- */
-#define ufold_bad_enum(T) \
-::ufold::core::enum_cast<T>(-1)
 
 #include "ufold/core.ipp"
 #endif // UFOLD_CORE_HPP

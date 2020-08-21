@@ -69,7 +69,7 @@ namespace ufold
 
         for (auto i = in.cbegin(); i <= in.cend(); ++i) {
             if ( const auto sep = getSeparatorTypeOf(*i)
-               ; sep != ufold_bad_enum(SeparatorType)
+               ; sep != bad_enum<SeparatorType>()
                )
             {
                 out.insert({ distance(in, i), sep });

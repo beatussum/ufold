@@ -23,6 +23,8 @@
 
 namespace ufold
 {
+    using namespace core;
+
     constexpr bool isSpace(const char_t c) noexcept
     {
         switch (c) {
@@ -102,7 +104,7 @@ namespace ufold
         } else if (isSpace(c)) {
             return SeparatorType::Space;
         } else {
-            return ufold_bad_enum(SeparatorType);
+            return bad_enum<SeparatorType>();
         }
     }
 }

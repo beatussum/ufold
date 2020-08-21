@@ -34,6 +34,12 @@ namespace ufold::core
         );
     }
 
+    template<typename _Enum>
+    constexpr auto bad_enum() noexcept
+    {
+        return enum_cast<_Enum>(-1);
+    }
+
     template<class _Container>
     typename _Container::difference_type distance(const _Container& first, const typename _Container::const_iterator last)
     {
