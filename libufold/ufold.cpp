@@ -18,101 +18,12 @@
 
 #include "ufold/ufold.hpp"
 
-#include <cwctype>
-
 namespace ufold
 {
     using namespace core;
 
     namespace
     {
-        [[gnu::const]]
-        constexpr bool isSpace(const char_t c) noexcept
-        {
-            switch (c) {
-                case L' ':      // SPACE
-                case L'\u2000': // EN QUAD
-                case L'\u2001': // EM QUAD
-                case L'\u2002': // EN SPACE
-                case L'\u2003': // EM SPACE
-                case L'\u2004': // THREE-PER-EM-SPACE
-                case L'\u2005': // FOUR-PER-EM-SPACE
-                case L'\u2006': // SIX-PER-EM-SPACE
-                case L'\u2007': // FIGURE SPACE
-                case L'\u2008': // PUNCTUATION SPACE
-                case L'\u2009': // THIN SPACE
-                case L'\u200A': // HAIR SPACE
-                case L'\u202F': // NARROW NO-BREAK SPACE
-                case L'\u205F': // MEDIUM MATHEMATICAL SPACE
-                case L'\u3000': // IDEOGRAPHIC SPACE
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        [[gnu::const]]
-        constexpr bool isSeparator(const char_t c) noexcept
-        {
-            switch (c) {
-                case L'-':      // HYPHEN-MINUS
-                case L'\u00AD': // SOFT HYPHEN
-                case L'\u2010': // HYPHEN
-                case L'\u2E3A': // TWO-EM DASH
-                case L'\u2E3B': // THREE-EM DASH
-                    return true;
-                default:
-                    return isSpace(c);
-            }
-        }
-
-        [[gnu::const]]
-        constexpr bool isPunctuationMark(const char_t c) noexcept
-        {
-            switch (c) {
-                case L',':
-                case L';':
-                case L':':
-                case L'?':
-                case L'!':
-                case L'\u203D': // INTERROBANG
-                case L'(':
-                case L')':
-                case L'"':
-                case L'\'':
-                case L'`':
-                case L'\u2018': // LEFT SINGLE QUOTATION MARK
-                case L'\u2019': // RIGHT SINGLE QUOTATION MARK
-                case L'\u201A': // SINGLE LOW-9 QUOTATION MARK
-                case L'\u201B': // SINGLE HIGH-REVERSED-9 QUOTATION MARK
-                case L'\u201C': // LEFT SINGLE QUOTATION MARK
-                case L'\u201D': // RIGHT SINGLE QUOTATION MARK
-                case L'\u201E': // DOUBLE LOW-9 QUOTATION MARK
-                case L'\u201F': // DOUBLE HIGH-REVERSED-9 QUOTATION MARK
-                case L'\u2039': // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-                case L'\u203A': // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-                case L'\u00AB': // DOUBLE LEFT-POINTING ANGLE QUOTATION MARK
-                case L'\u00BB': // DOUBLE RIGHT-POINTING ANGLE QUOTATION MARK
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        [[gnu::const]]
-        constexpr SeparatorType getSeparatorTypeOf(const char_t c) noexcept
-        {
-            if (std::iswupper(c)) {
-                return SeparatorType::Capital;
-            } else if (isPunctuationMark(c)) {
-                return SeparatorType::Punctuation;
-            } else if (isSpace(c)) {
-                return SeparatorType::Space;
-            } else {
-                return ufold_bad_enum(SeparatorType);
-            }
-        }
-
         void push_backsv(stringv_vec& vec, const string_view::const_iterator first, const string_view::const_iterator last)
         {
             vec.push_back(

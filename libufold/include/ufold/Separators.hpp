@@ -26,6 +26,7 @@
 #ifndef UFOLD_SEPARATORS_HPP
 #define UFOLD_SEPARATORS_HPP
 
+#include "libufold_export.hpp"
 #include "ufold/types.hpp"
 
 #include <map>
@@ -45,6 +46,19 @@ namespace ufold
 
     /// `std::map` of separators with their position and type
     using Separators = std::map<string::size_type, SeparatorType>;
+
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    constexpr bool isSpace(const char_t) noexcept;
+
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    constexpr bool isSeparator(const char_t) noexcept;
+
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    constexpr bool isPunctuationMark(const char_t) noexcept;
+
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    constexpr SeparatorType getSeparatorTypeOf(const char_t) noexcept;
 }
 
+#include "ufold/Separators.ipp"
 #endif // UFOLD_SEPARATORS_HPP

@@ -28,7 +28,10 @@
 #define UFOLD_CORE_HPP
 
 #include "libufold_export.hpp"
-#include "ufold/types.hpp"
+
+#include <iterator>
+#include <future>
+#include <vector>
 
 /**
  * @brief Namespace of some core libufold-specific utilities

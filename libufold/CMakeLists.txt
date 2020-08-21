@@ -24,7 +24,8 @@ set(LIBUFOLD_HPP
     include/ufold/types.hpp
     include/ufold/ufold.hpp)
 set(LIBUFOLD_IPP
-    include/ufold/core.ipp)
+    include/ufold/core.ipp
+    include/ufold/Separators.ipp)
 set(LIBUFOLD_CPP
     ufold.cpp)
 

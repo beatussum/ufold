@@ -26,7 +26,6 @@
 #ifndef UFOLD_TYPES_HPP
 #define UFOLD_TYPES_HPP
 
-#include <future>
 #include <vector>
 
 /// Namespace of libufold
