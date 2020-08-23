@@ -23,7 +23,7 @@ namespace ufold
     using namespace core;
 
     // `std::out_of_range` cannot be thrown
-    string fold(string str, const string::size_type width)
+    string fold(string str, const width_t width)
     try {
         if (const auto size = str.size(); size > width) {
             using future_t = std::future<string::reverse_iterator>;

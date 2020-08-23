@@ -34,6 +34,9 @@ namespace ufold
     /// Type of character used by ufold::string
     using char_t = wchar_t;
 
+    /// Type representing the column length
+    using width_t = uint8_t;
+
     /// std::basic_string used by libufold
     using string = std::basic_string<char_t>;
 

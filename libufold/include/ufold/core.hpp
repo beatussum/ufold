@@ -79,7 +79,7 @@ namespace ufold::core
 
     template<class T>
     [[gnu::const]]
-    auto make_vector(const typename std::vector<T>::size_type size);
+    auto make_vector(const typename std::vector<T>::size_type);
 
     template<typename _Enum>
     [[gnu::const]]

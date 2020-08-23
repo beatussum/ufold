@@ -44,7 +44,7 @@ namespace ufold
      *        or ufold::string::insert fail
      */
     [[gnu::const]] LIBUFOLD_EXPORT
-    string fold(string str, const string::size_type width);
+    string fold(string str, const width_t width);
 
     /**
      * @brief Scan all separators of a ufold::string
@@ -63,7 +63,7 @@ namespace ufold
      * @return a ufold::string_vec
      */
     [[gnu::const]] LIBUFOLD_EXPORT
-    string_vec split(const string& in);
+    string_vec split(const string_view in);
 
     /**
      * @brief Clean the repetitive character at the ufold::string_view

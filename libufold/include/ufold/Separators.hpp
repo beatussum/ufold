@@ -45,7 +45,7 @@ namespace ufold
     };
 
     /// `std::map` of separators with their position and type
-    using Separators = std::map<string::size_type, SeparatorType>;
+    using Separators = std::map<width_t, SeparatorType>;
 
     [[gnu::const]]
     constexpr bool isSpace(const char_t) noexcept;
