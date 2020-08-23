@@ -47,16 +47,16 @@ namespace ufold
     /// `std::map` of separators with their position and type
     using Separators = std::map<string::size_type, SeparatorType>;
 
-    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    [[gnu::const]]
     constexpr bool isSpace(const char_t) noexcept;
 
-    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    [[gnu::const]]
     constexpr bool isSeparator(const char_t) noexcept;
 
-    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    [[gnu::const]]
     constexpr bool isPunctuationMark(const char_t) noexcept;
 
-    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    [[gnu::const]]
     constexpr SeparatorType getSeparatorTypeOf(const char_t) noexcept;
 }
 
