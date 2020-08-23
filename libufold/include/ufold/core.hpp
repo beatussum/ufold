@@ -41,9 +41,10 @@ namespace ufold::core
 {
     using std::distance;
 
-    template<class _InputIt, class _UnaryPredicate>
+    template<class _ExecutionPolicy, class _InputIt, class _UnaryPredicate>
     [[gnu::const]]
-    std::future<_InputIt> async_find_if( const _InputIt first
+    std::future<_InputIt> async_find_if( _ExecutionPolicy&& policy
+                                       , const _InputIt first
                                        , const _InputIt last
                                        , const _UnaryPredicate p
                                        );
@@ -68,9 +69,10 @@ namespace ufold::core
     [[gnu::const]]
     constexpr auto enum_cast(const std::underlying_type_t<_Enum> value) noexcept;
 
-    template<class _InputIt, class T>
+    template<class _ExecutionPolicy, class _InputIt, class T>
     [[gnu::const]]
-    _InputIt find_first_not_of( const _InputIt first
+    _InputIt find_first_not_of( _ExecutionPolicy&& policy
+                              , const _InputIt first
                               , const _InputIt last
                               , const T& value
                               );
@@ -88,29 +90,29 @@ namespace ufold::core
  * @brief Add some operator overloads to use an `enum` as a flag
  * @param T the `enum` to which the operators are added
  */
-#define UFOLD_ADD_FLAGS_OP(T)                                       \
-[[gnu::const]] LIBUFOLD_NO_EXPORT                                   \
-constexpr T operator|(const T a, const T b) noexcept                \
-{                                                                   \
-    using ::ufold::core::underlying_cast;                           \
-                                                                    \
-    return static_cast<T>(underlying_cast(a) | underlying_cast(b)); \
-}                                                                   \
-                                                                    \
-[[gnu::const]] LIBUFOLD_NO_EXPORT                                   \
-constexpr T operator|=(T a, const T b) noexcept                     \
-{                                                                   \
-    a = a | b;                                                      \
-                                                                    \
-    return a;                                                       \
-}                                                                   \
-                                                                    \
-[[gnu::const]] LIBUFOLD_NO_EXPORT                                   \
-constexpr T operator&(const T a, const T b) noexcept                \
-{                                                                   \
-    using ::ufold::core::underlying_cast;                           \
-                                                                    \
-    return static_cast<T>(underlying_cast(a) & underlying_cast(b)); \
+#define UFOLD_ADD_FLAGS_OP(T)                                          \
+[[gnu::const]] LIBUFOLD_NO_EXPORT                                      \
+constexpr T operator|(const T a, const T b) noexcept                   \
+{                                                                      \
+    using ::ufold::core::underlying_cast;                              \
+                                                                       \
+    return static_cast<T>(underlying_cast(a) | underlying_cast(b));    \
+}                                                                      \
+                                                                       \
+[[gnu::const]] LIBUFOLD_NO_EXPORT                                      \
+constexpr T operator|=(T a, const T b) noexcept                        \
+{                                                                      \
+    a = a | b;                                                         \
+                                                                       \
+    return a;                                                          \
+}                                                                      \
+                                                                       \
+[[gnu::const]] LIBUFOLD_NO_EXPORT                                      \
+constexpr bool operator&(const T a, const T b) noexcept                \
+{                                                                      \
+    using ::ufold::core::underlying_cast;                              \
+                                                                       \
+    return static_cast<bool>(underlying_cast(a) & underlying_cast(b)); \
 }
 // ADD_FLAGS_OPERATORS(T)
 

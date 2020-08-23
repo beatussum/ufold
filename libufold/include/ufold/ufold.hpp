@@ -60,10 +60,10 @@ namespace ufold
      *        of ufold::string_view
      *
      * @param in the input ufold::string
-     * @return a ufold::stringv_vec
+     * @return a ufold::string_vec
      */
     [[gnu::const]] LIBUFOLD_EXPORT
-    stringv_vec split(const string& in);
+    string_vec split(const string& in);
 
     /**
      * @brief Clean the repetitive character at the ufold::string_view

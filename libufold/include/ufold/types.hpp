@@ -40,7 +40,7 @@ namespace ufold
     /// std::string_view used by libufold
     using string_view = std::basic_string_view<char_t>;
 
-    using stringv_vec = std::vector<string_view>;
+    using string_vec = std::vector<string>;
 }
 
 #endif // UFOLD_TYPES_HPP

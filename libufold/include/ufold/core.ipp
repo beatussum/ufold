@@ -24,12 +24,16 @@
 
 namespace ufold::core
 {
-    template<class _InputIt, class _UnaryPredicate>
-    std::future<_InputIt> async_find_if(const _InputIt first, const _InputIt last, const _UnaryPredicate p)
+    template<class _ExecutionPolicy, class _InputIt, class _UnaryPredicate>
+    std::future<_InputIt> async_find_if(_ExecutionPolicy&& policy, const _InputIt first, const _InputIt last, const _UnaryPredicate p)
     {
         return std::async(
-            [=] () -> _InputIt {
-                return std::find_if(first, last, p);
+            [=, &policy] () -> _InputIt {
+                return std::find_if( std::forward<_ExecutionPolicy>(policy)
+                                   , first
+                                   , last
+                                   , p
+                                   );
             }
         );
     }
@@ -58,10 +62,10 @@ namespace ufold::core
         return static_cast<_Enum>(value);
     }
 
-    template<class _InputIt, class T>
-    _InputIt find_first_not_of(const _InputIt first, const _InputIt last, const T& value)
+    template<class _ExecutionPolicy, class _InputIt, class T>
+    _InputIt find_first_not_of(_ExecutionPolicy&& policy, const _InputIt first, const _InputIt last, const T& value)
     {
-        return std::adjacent_find(std::execution::par, first, last,
+        return std::adjacent_find(std::forward<_ExecutionPolicy>(policy), first, last,
             [&] (const T& a, const T& b) {
                 return (a != b) && (a == value);
             }

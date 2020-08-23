@@ -22,16 +22,6 @@ namespace ufold
 {
     using namespace core;
 
-    namespace
-    {
-        void push_backsv(stringv_vec& vec, const string_view::const_iterator first, const string_view::const_iterator last)
-        {
-            vec.push_back(
-                string_view(first, distance(first, last))
-            );
-        }
-    }
-
     // `std::out_of_range` cannot be thrown
     string fold(string str, const string::size_type width)
     try {
@@ -40,11 +30,13 @@ namespace ufold
 
             auto futures = make_vector<future_t>((size % width) + 1);
 
-            for (auto i = str.begin(); (i += width) < str.end(); ) {
+            for (auto i = str.begin(); (i += width) < (str.end() - 1); ) {
                 futures.push_back(
-                    async_find_if(std::make_reverse_iterator(i),
-                                  str.rbegin(),
-                                  &isSeparator)
+                    async_find_if( std::execution::par_unseq
+                                 , std::make_reverse_iterator(i)
+                                 , str.rbegin()
+                                 , &isSeparator
+                                 )
                 );
             }
 
@@ -67,7 +59,8 @@ namespace ufold
     try {
         Separators out;
 
-        for (auto i = in.cbegin(); i <= in.cend(); ++i) {
+        for (auto i = in.cbegin(); i != in.cend(); ++i)
+        {
             if ( const auto sep = getSeparatorTypeOf(*i)
                ; sep != bad_enum<SeparatorType>()
                )
@@ -79,32 +72,35 @@ namespace ufold
         return out;
     } catch (...) { ufold_rethrow; }
 
-    stringv_vec split(const string_view in)
+    string_vec split(const string_view in)
     try {
-        using namespace std::execution;
+        string_vec out;
 
-        stringv_vec out;
-
-        string_view::const_iterator first;
-        for ( auto last = first = in.cbegin()
-            ; (last = std::find(par, last, in.cend(), '\n')) != in.cend()
+        for ( auto first = in.cbegin(), last = first
+            ; last != in.cend()
             ;)
         {
-            push_backsv(out, first, last - 1);
-            ++first = last;
-        }
+            last = std::find( std::execution::par_unseq
+                            , last
+                            , in.cend()
+                            , L'\n'
+                            );
 
-        push_backsv(out, first, in.cend());
+            out.push_back(string(first, last));
+            first = ++last;
+        }
 
         return out;
     } catch (...) { ufold_rethrow; }
 
     string_view cleanOut(string_view str)
     try {
+        using namespace std::execution;
+
         const auto value = str.front();
 
         if ( const auto iter =
-                find_first_not_of(str.cbegin(), str.cend(), value)
+                find_first_not_of(par_unseq, str.cbegin(), str.cend(), value)
            ; iter != str.cend()
            )
         {
@@ -112,7 +108,7 @@ namespace ufold
         }
 
         if ( const auto iter =
-                find_first_not_of(str.crbegin(), str.crend(), value)
+                find_first_not_of(par_unseq, str.crbegin(), str.crend(), value)
            ; iter != str.crend()
            )
         {
