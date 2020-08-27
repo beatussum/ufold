@@ -26,8 +26,8 @@
 #ifndef UFOLD_UFOLD_HPP
 #define UFOLD_UFOLD_HPP
 
-#include "ufold/Formats.hpp"
 #include "ufold/Separators.hpp"
+#include "ufold/types.hpp"
 
 /// Namespace of libufold
 namespace ufold
@@ -45,15 +45,6 @@ namespace ufold
      */
     [[gnu::const]] LIBUFOLD_EXPORT
     string fold(string str, const width_t width);
-
-    /**
-     * @brief Scan all separators of a ufold::string
-     *
-     * @param in the input ufold::string_view
-     * @return a #Separators
-     */
-    [[gnu::const]] LIBUFOLD_EXPORT
-    Separators scanSeparators(const string_view in);
 
     /**
      * @brief Split a ufold::string separated by '\n' of a vector

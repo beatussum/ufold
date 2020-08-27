@@ -37,24 +37,6 @@ namespace ufold
     /// An `enum` type representing how spaces are added
     enum class Formats : formats_t {
         /**
-         * Prefer to add spaces where the previous character is a
-         * punctuation mark
-         *
-         * @pexample
-         *
-         * ```plain
-         * Hello, I am Bob. I see an example sentence   |
-         * Hello,  I am Bob.  I see an example  sentence| (a)
-         * Hello,  I  am Bob. I see an example  sentence| (b)
-         * ```
-         *
-         * @note (a) Formats::PreferPunctuation, Formats::FillFromLeft
-         *           and Formats::FillFromRight are set.
-         * @note (b) Same thing except that Formats::PreferPunctuation
-         *           is unset.
-         */
-        PreferPunctuation = 0x1,
-        /**
          * Prefer to add spaces where the next character is an
          * uppercase letter
          *
@@ -71,7 +53,41 @@ namespace ufold
          * @note (b) Same thing except that Formats::PreferCapital
          *           is unset.
          */
-        PreferCapital = 0x2,
+        PreferCapital = 0x1,
+        /**
+         * Prefer to add spaces where the previous character is a
+         * punctuation mark
+         *
+         * @pexample
+         *
+         * ```plain
+         * Hello, I am Bob. I see an example sentence   |
+         * Hello,  I am Bob.  I see an example  sentence| (a)
+         * Hello,  I  am Bob. I see an example  sentence| (b)
+         * ```
+         *
+         * @note (a) Formats::PreferPunctuation, Formats::FillFromLeft
+         *           and Formats::FillFromRight are set.
+         * @note (b) Same thing except that Formats::PreferPunctuation
+         *           is unset.
+         */
+        PreferPunctuation = 0x2,
+        /// Mask for Formats::PreferPunctuation and Formats::PreferCapital
+        mask_Separator = 0x3,
+        /**
+         * If Formats::FillFromCenter is unset, only add spaces from
+         * the left.
+         *
+         * @pexample
+         *
+         * ```plain
+         * I am Bob and I see an example sentence   |
+         * I  am  Bob  and I see an example sentence|
+         * ```
+         *
+         * @see Formats::FillFromCenter
+         */
+        FillFromLeft = 0x4,
         /**
          * 1. If Formats::FillFromLeft or Formats::FillFromRight is set,
          *    add spaces from the center and then from the corresponding
@@ -100,26 +116,7 @@ namespace ufold
          *           are set.
          * @note (e) Only Formats::FillFromCenter is set.
          */
-        FillFromCenter = 0x4,
-        /**
-         * Mask for Formats::PreferPunctuation, Formats::PreferCapital
-         * and Formats::FillFromCenter
-         */
-        mask_Specials = 0x7,
-        /**
-         * If Formats::FillFromCenter is unset, only add spaces from
-         * the left.
-         *
-         * @pexample
-         *
-         * ```plain
-         * I am Bob and I see an example sentence   |
-         * I  am  Bob  and I see an example sentence|
-         * ```
-         *
-         * @see Formats::FillFromCenter
-         */
-        FillFromLeft = 0x8,
+        FillFromCenter = 0x8,
         /**
          * If Formats::FillFromCenter is unset, only add spaces from
          * the right.
@@ -134,16 +131,18 @@ namespace ufold
          * @see Formats::FillFromCenter
          */
         FillFromRight = 0x10,
-        /// Mask for Formats::FillFromLeft and Formats::FillFromRight
-        mask_Position = 0x18
+        /**
+         * Mask for Formats::FillFromLeft, Formats::FillFromCenter,
+         * and Formats::FillFromRight
+         */
+        mask_Alignment = 0x1C
     };
-
     UFOLD_ADD_FLAGS_OP(Formats)
 
     /// Default value used for #Formats flag
     constexpr Formats defaultFormat = Formats::PreferPunctuation
-                                    | Formats::FillFromCenter
                                     | Formats::FillFromLeft
+                                    | Formats::FillFromCenter
                                     | Formats::FillFromRight;
 }
 

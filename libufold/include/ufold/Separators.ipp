@@ -19,6 +19,8 @@
 #ifndef UFOLD_SEPARATORS_IPP
 #define UFOLD_SEPARATORS_IPP
 
+#include "ufold/core.hpp"
+
 #include <cwctype>
 
 namespace ufold

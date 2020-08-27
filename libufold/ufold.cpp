@@ -17,10 +17,43 @@
 
 
 #include "ufold/ufold.hpp"
+#include "ufold/Formats.hpp"
 
 namespace ufold
 {
     using namespace core;
+
+    namespace
+    {
+        [[gnu::const]]
+        Separators scanSeparators(const string_view in, const Formats format)
+        {
+            Separators out;
+
+            for (auto i = in.cbegin(); i != in.cend(); ++i) {
+                switch (const auto sep = getSeparatorTypeOf(*i); sep) {
+                    case SeparatorType::Capital:
+                        if (format & Formats::PreferCapital)
+                            goto insert;
+
+                        break;
+
+                    case SeparatorType::Punctuation:
+                        if (format & Formats::PreferPunctuation)
+                            goto insert;
+
+                        break;
+
+                    default:
+                    insert:
+                        out.insert({ distance(in, i), sep });
+                        break;
+                }
+            }
+
+            return out;
+        }
+    }
 
     // `std::out_of_range` cannot be thrown
     string fold(string str, const width_t width)
@@ -55,37 +88,17 @@ namespace ufold
         return str;
     } catch (...) { ufold_rethrow; }
 
-    Separators scanSeparators(const string_view in)
-    try {
-        Separators out;
-
-        for (auto i = in.cbegin(); i != in.cend(); ++i)
-        {
-            if ( const auto sep = getSeparatorTypeOf(*i)
-               ; sep != bad_enum<SeparatorType>()
-               )
-            {
-                out.insert({ distance(in, i), sep });
-            }
-        }
-
-        return out;
-    } catch (...) { ufold_rethrow; }
-
     string_vec split(const string_view in)
     try {
+        using namespace std::execution;
+
         string_vec out;
 
         for ( auto first = in.cbegin(), last = first
             ; last != in.cend()
             ;)
         {
-            last = std::find( std::execution::par_unseq
-                            , last
-                            , in.cend()
-                            , L'\n'
-                            );
-
+            last = std::find(par_unseq, last, in.cend(), L'\n');
             out.push_back(string(first, last));
             first = ++last;
         }

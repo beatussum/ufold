@@ -26,6 +26,7 @@
 #ifndef UFOLD_TYPES_HPP
 #define UFOLD_TYPES_HPP
 
+#include <string>
 #include <vector>
 
 /// Namespace of libufold
@@ -34,11 +35,11 @@ namespace ufold
     /// Type of character used by ufold::string
     using char_t = wchar_t;
 
-    /// Type representing the column length
-    using width_t = uint8_t;
-
     /// std::basic_string used by libufold
     using string = std::basic_string<char_t>;
+
+    /// Type representing the column length
+    using width_t = string::size_type;
 
     /// std::string_view used by libufold
     using string_view = std::basic_string_view<char_t>;
