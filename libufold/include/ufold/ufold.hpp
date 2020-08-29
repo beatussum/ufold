@@ -26,6 +26,8 @@
 #ifndef UFOLD_UFOLD_HPP
 #define UFOLD_UFOLD_HPP
 
+#include "libufold_export.hpp"
+
 #include "ufold/Formats.hpp"
 #include "ufold/types.hpp"
 

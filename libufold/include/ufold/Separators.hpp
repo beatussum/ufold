@@ -27,6 +27,7 @@
 #define UFOLD_SEPARATORS_HPP
 
 #include "libufold_export.hpp"
+
 #include "ufold/types.hpp"
 
 #include <map>

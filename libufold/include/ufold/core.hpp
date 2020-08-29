@@ -18,6 +18,7 @@
 /**
  * @file ufold/core.hpp
  * @brief Some core utilities used by the library
+ * @note This file should not be used outside of libufold
  * @author Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
  * @date 2020-08-13
  * @copyright GPL-3+
@@ -27,16 +28,10 @@
 #ifndef UFOLD_CORE_HPP
 #define UFOLD_CORE_HPP
 
-#include "libufold_export.hpp"
-
 #include <iterator>
 #include <future>
 #include <vector>
 
-/**
- * @brief Namespace of some core libufold-specific utilities
- * @note This namespace should not be used outside of libufold
- */
 namespace ufold::core
 {
     using std::distance;
@@ -94,10 +89,6 @@ namespace ufold::core
     constexpr auto underlying_cast(const _Enum constant) noexcept;
 }
 
-/**
- * @brief Add some operator overloads to use an `enum` as a flag
- * @param T the `enum` to which the operators are added
- */
 #define UFOLD_ADD_FLAGS_OP(T)                                          \
 [[gnu::const]]                                                         \
 constexpr T operator|(const T a, const T b) noexcept                   \
