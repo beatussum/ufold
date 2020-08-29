@@ -27,6 +27,7 @@ set(LIBUFOLD_IPP
     include/ufold/core.ipp
     include/ufold/Separators.ipp)
 set(LIBUFOLD_CPP
+    Separators.cpp
     ufold.cpp)
 
 add_library("${PROJECT_NAME}" SHARED

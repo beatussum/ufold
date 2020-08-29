@@ -17,7 +17,7 @@
 
 
 #include "ufold/ufold.hpp"
-#include "ufold/Formats.hpp"
+#include "ufold/Separators.hpp"
 
 namespace ufold
 {
@@ -44,11 +44,45 @@ namespace ufold
 
                         break;
 
-                    default:
+                    case SeparatorType::Space:
                     insert:
-                        out.insert({ distance(in, i), sep });
+                        if ((i == in.cbegin()) or (*(i - 1) != *i))
+                            out.insert({ distance(in, i), sep });
+
                         break;
                 }
+            }
+
+            return out;
+        }
+
+        [[gnu::const]]
+        constexpr formats_t countBits(const Formats format) noexcept
+        {
+            formats_t count = 0;
+
+            for ( auto f = format & Formats::mask_Alignment
+                ; f != 0
+                ; f >>= 1
+                )
+            {
+                count += f & 1;
+            }
+
+            return count;
+        }
+
+        [[gnu::const]]
+        Separators::const_iterator getMiddle(const Separators& sep)
+        {
+            auto out = sep.cbegin();
+
+            for ( Separators::size_type i = 0
+                ; i != sep.size() / 2
+                ; ++i
+                )
+            {
+                ++out;
             }
 
             return out;
@@ -58,30 +92,33 @@ namespace ufold
     // `std::out_of_range` cannot be thrown
     string fold(string str, const width_t width)
     try {
-        if (const auto size = str.size(); size > width) {
-            using future_t = std::future<string::reverse_iterator>;
+        using future_t = std::future<string::reverse_iterator>;
 
-            auto futures = make_vector<future_t>((size % width) + 1);
+        const auto size = str.size();
 
-            for (auto i = str.begin(); (i += width) < (str.end() - 1); ) {
-                futures.push_back(
-                    async_find_if( std::execution::par_unseq
-                                 , std::make_reverse_iterator(i)
-                                 , str.rbegin()
-                                 , &isSeparator
-                                 )
-                );
-            }
+        if (size <= width)
+            return str;
 
-            for (auto& i : futures) {
-                if ( const auto iter = i.get().base()
-                   ; isSpace(*iter)
-                   )
-                {
-                    *iter = L'\n';
-                } else {
-                    str.insert(iter, L'\n');
-                }
+        auto futures = make_vector<future_t>((size % width) + 1);
+
+        for (auto i = str.begin(); (i += width) < (str.end() - 1); ) {
+            futures.push_back(
+                async_find_if( std::execution::par_unseq
+                             , std::make_reverse_iterator(i)
+                             , str.rbegin()
+                             , &isSeparator
+                             )
+            );
+        }
+
+        for (auto& i : futures) {
+            if ( const auto iter = i.get().base()
+               ; isSpace(*iter)
+               )
+            {
+                *iter = L'\n';
+            } else {
+                str.insert(iter, L'\n');
             }
         }
 
@@ -126,6 +163,71 @@ namespace ufold
            )
         {
             str.remove_suffix(distance(str, iter));
+        }
+
+        return str;
+    } catch (...) { ufold_rethrow; }
+
+    string align(string str, const Formats format, const width_t width, const width_t max)
+    try {
+        width_t spaces = width - str.size();
+
+        if (spaces < 0) {
+            throw std::invalid_argument( "`str` ("
+                                       + std::to_string(str.size())
+                                       + ") is too small: it must be "
+                                         "larger than `width` ("
+                                       + std::to_string(width)
+                                       + "). See "
+                                         "`ufold::fold()` to fold this "
+                                         "`ufold::string` if necessary."
+                                       );
+        } else if (spaces == 0) {
+            return str;
+        }
+
+        const auto sep = scanSeparators(str, format);
+
+        const formats_t n = countBits(format);
+        const bool left = format & Formats::FillFromLeft;
+        const bool center = format & Formats::FillFromCenter;
+        const bool right = format & Formats::FillFromRight;
+
+        for (formats_t offset = 0, i = 0; spaces != 0; ++i) {
+            width_t index;
+
+            if (  (i % (n + 1) == 0 and center)
+               or (i % n == 0 and !center)
+               )
+            {
+                ++offset;
+            }
+
+            if (left and (  (center and (i % n == n - 2))
+                         or (!center and (i % n == n - 1))
+                         )
+               )
+            {
+                index = (sep.cbegin() + offset)->first;
+            } else if (center and (i % n == n - 1)) {
+                if ( const auto middle = getMiddle(sep)
+                   ; (left and !right) or (   (i % (n + 1) == n)
+                                          and (left == right)
+                                          )
+                   )
+                {
+                    index = (middle - offset)->first;
+                } else {
+                    index = (middle + offset)->first;
+                }
+            } else if (right and (i % n == 0)) {
+                index = (sep.cend() + offset)->first;
+            }
+
+            for (auto m = max; m != 0; --m) {
+                str.insert(index, 1, str[index]);
+                --spaces;
+            }
         }
 
         return str;

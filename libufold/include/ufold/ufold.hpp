@@ -26,7 +26,7 @@
 #ifndef UFOLD_UFOLD_HPP
 #define UFOLD_UFOLD_HPP
 
-#include "ufold/Separators.hpp"
+#include "ufold/Formats.hpp"
 #include "ufold/types.hpp"
 
 /// Namespace of libufold
@@ -65,6 +65,12 @@ namespace ufold
      */
     [[gnu::const]] LIBUFOLD_EXPORT
     string_view cleanOut(string_view in);
+
+    [[gnu::const]] LIBUFOLD_EXPORT
+    string align( string str
+                , const Formats format = defaultFormat
+                , const width_t width = 75
+                , const width_t max = 2);
 }
 
 #endif // UFOLD_UFOLD_HPP

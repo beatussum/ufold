@@ -58,6 +58,16 @@ namespace ufold
 
     [[gnu::const]]
     constexpr SeparatorType getSeparatorTypeOf(const char_t) noexcept;
+
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    Separators::const_iterator operator+( Separators::const_iterator
+                                        , Separators::difference_type
+                                        ) noexcept;
+
+    [[gnu::const]] LIBUFOLD_NO_EXPORT
+    Separators::const_iterator operator-( Separators::const_iterator
+                                        , Separators::difference_type
+                                        ) noexcept;
 }
 
 #include "ufold/Separators.ipp"

@@ -67,7 +67,7 @@ namespace ufold::core
     {
         return std::adjacent_find(std::forward<_ExecutionPolicy>(policy), first, last,
             [&] (const T& a, const T& b) {
-                return (a != b) && (a == value);
+                return (a != b) and (a == value);
             }
         ) + 1;
     }
