@@ -45,6 +45,13 @@ namespace ufold::core
     }
 
     template<class _Container>
+    [[gnu::const]]
+    typename _Container::const_iterator cmiddle(const _Container& container) noexcept
+    {
+        return container.cbegin() + (container.size() / 2);
+    }
+
+    template<class _Container>
     typename _Container::difference_type distance(const _Container& first, const typename _Container::const_iterator last)
     {
         return distance(first.cbegin(), last);
@@ -71,6 +78,13 @@ namespace ufold::core
             }
         ) + 1;
     }
+
+    template<class _AContainer>
+    typename _AContainer::mapped_type lastValue(const _AContainer& container) noexcept
+    {
+        return (--container.cend())->second;
+    }
+
 
     template<class T>
     auto make_vector(const typename std::vector<T>::size_type size)

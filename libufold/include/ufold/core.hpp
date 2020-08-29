@@ -55,6 +55,10 @@ namespace ufold::core
 
     template<class _Container>
     [[gnu::const]]
+    typename _Container::const_iterator cmiddle(const _Container& container) noexcept;
+
+    template<class _Container>
+    [[gnu::const]]
     typename _Container::difference_type distance( const _Container& first
                                                  , const typename _Container::const_iterator last
                                                  );
@@ -76,6 +80,10 @@ namespace ufold::core
                               , const _InputIt last
                               , const T& value
                               );
+
+    template<class _AContainer>
+    [[gnu::const]]
+    typename _AContainer::mapped_type lastValue(const _AContainer& container) noexcept;
 
     template<class T>
     [[gnu::const]]

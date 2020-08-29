@@ -46,7 +46,7 @@ namespace ufold
 
                     case SeparatorType::Space:
                     insert:
-                        if ((i == in.cbegin()) or (*(i - 1) != *i))
+                        if (out.empty() or (lastValue(out) != sep))
                             out.insert({ distance(in, i), sep });
 
                         break;
@@ -70,22 +70,6 @@ namespace ufold
             }
 
             return count;
-        }
-
-        [[gnu::const]]
-        Separators::const_iterator getMiddle(const Separators& sep)
-        {
-            auto out = sep.cbegin();
-
-            for ( Separators::size_type i = 0
-                ; i != sep.size() / 2
-                ; ++i
-                )
-            {
-                ++out;
-            }
-
-            return out;
         }
     }
 
@@ -210,7 +194,7 @@ namespace ufold
             {
                 index = (sep.cbegin() + offset)->first;
             } else if (center and (i % n == n - 1)) {
-                if ( const auto middle = getMiddle(sep)
+                if ( const auto middle = cmiddle(sep)
                    ; (left and !right) or (   (i % (n + 1) == n)
                                           and (left == right)
                                           )
