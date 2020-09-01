@@ -144,6 +144,10 @@ namespace ufold
                                     | Formats::FillFromLeft
                                     | Formats::FillFromCenter
                                     | Formats::FillFromRight;
+
+    [[gnu::const]]
+    constexpr formats_t countAlignments(const Formats format) noexcept;
 }
 
+#include "ufold/Formats.ipp"
 #endif // UFOLD_FORMAT_HPP

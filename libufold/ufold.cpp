@@ -17,7 +17,7 @@
 
 
 #include "ufold/ufold.hpp"
-#include "ufold/Separators.hpp"
+#include "ufold/SeparatorSearcher.hpp"
 
 namespace ufold
 {
@@ -26,9 +26,9 @@ namespace ufold
     namespace
     {
         [[gnu::const]]
-        Separators scanSeparators(const string_view in, const Formats format)
+        std::shared_ptr<Separators> scanSeparators(const string_view in, const Formats format)
         {
-            Separators out;
+            auto out = std::make_shared<Separators>();
 
             for (auto i = in.cbegin(); i != in.cend(); ++i) {
                 switch (const auto sep = getSeparatorTypeOf(*i); sep) {
@@ -46,30 +46,14 @@ namespace ufold
 
                     case SeparatorType::Space:
                     insert:
-                        if (out.empty() or (lastValue(out) != sep))
-                            out.insert({ distance(in, i), sep });
+                        if (out->empty() or (lastValue(*out) != sep))
+                            out->insert({ distance(in, i), sep });
 
                         break;
                 }
             }
 
             return out;
-        }
-
-        [[gnu::const]]
-        constexpr formats_t countBits(const Formats format) noexcept
-        {
-            formats_t count = 0;
-
-            for ( auto f = format & Formats::mask_Alignment
-                ; f != 0
-                ; f >>= 1
-                )
-            {
-                count += f & 1;
-            }
-
-            return count;
         }
     }
 
@@ -171,45 +155,45 @@ namespace ufold
         }
 
         const auto sep = scanSeparators(str, format);
+        SeparatorSearcher functor(sep, str, format);
 
-        const formats_t n = countBits(format);
+        const formats_t n = countAlignments(format);
         const bool left = format & Formats::FillFromLeft;
         const bool center = format & Formats::FillFromCenter;
         const bool right = format & Formats::FillFromRight;
 
-        for (formats_t offset = 0, i = 0; spaces != 0; ++i) {
-            width_t index;
-
-            if (  (i % (n + 1) == 0 and center)
-               or (i % n == 0 and !center)
-               )
-            {
-                ++offset;
-            }
+        for (formats_t i = 0; spaces != 0; ++i) {
+            Separators::const_iterator it;
 
             if (left and (  (center and (i % n == n - 2))
                          or (!center and (i % n == n - 1))
                          )
                )
             {
-                index = (sep.cbegin() + offset)->first;
+                it = functor(sep->cbegin(), sep->cend());
             } else if (center and (i % n == n - 1)) {
-                if ( const auto middle = cmiddle(sep)
+                if ( const auto middle = functor.fraction(1, 2)
                    ; (left and !right) or (   (i % (n + 1) == n)
                                           and (left == right)
                                           )
                    )
                 {
-                    index = (middle - offset)->first;
+                    it = functor( sep->crbegin() + middle
+                                , sep->crend()
+                                ).base();
                 } else {
-                    index = (middle + offset)->first;
+                    it = functor( sep->cbegin() + middle
+                                , sep->cend()
+                                );
                 }
             } else if (right and (i % n == 0)) {
-                index = (sep.cend() + offset)->first;
+                it = functor(sep->crbegin(), sep->crend()).base();
             }
 
+            sep->erase(it);
+
             for (auto m = max; m != 0; --m) {
-                str.insert(index, 1, str[index]);
+                str.insert(it->first, 1, str[it->first]);
                 --spaces;
             }
         }

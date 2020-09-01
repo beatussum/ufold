@@ -21,13 +21,16 @@ set(LIBUFOLD_HPP
     include/ufold/core.hpp
     include/ufold/Formats.hpp
     include/ufold/Separators.hpp
+    include/ufold/SeparatorSearcher.hpp
     include/ufold/types.hpp
     include/ufold/ufold.hpp)
 set(LIBUFOLD_IPP
     include/ufold/core.ipp
-    include/ufold/Separators.ipp)
+    include/ufold/Separators.ipp
+    include/ufold/SeparatorSearcher.ipp)
 set(LIBUFOLD_CPP
     Separators.cpp
+    SeparatorSearcher.cpp
     ufold.cpp)
 
 add_library("${PROJECT_NAME}" SHARED
