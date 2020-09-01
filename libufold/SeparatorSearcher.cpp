@@ -24,16 +24,58 @@ namespace ufold
 
     Separators::const_iterator SeparatorSearcher::find_closest(const width_t key) const
     {
-        const auto a = m_sep_->upper_bound(key);
-        const auto b = m_sep_->lower_bound(key);
+        const auto a = m_sep_.upper_bound(key);
+        const auto b = m_sep_.lower_bound(key);
 
         return (key - a->first) < (b->first - key) ? a : b;
     }
 
-    Separators::difference_type SeparatorSearcher::fraction(const size_t n, const size_t d) const
+    width_t SeparatorSearcher::operator()(const FirstIterator first)
     {
-        return distance( *m_sep_
-                       , find_closest(m_size_ * n / d)
-                       );
+        switch (first) {
+            case L:
+            {
+                Separators::const_iterator last;
+                if (m_format_ & Formats::FillFromCenter) {
+                    last = find_closest(m_size_ / 4);
+                } else if (m_format_ & Formats::FillFromRight) {
+                    last = find_closest(m_size_ / 2);
+                } else {
+                    last = m_sep_.cend();
+                }
+
+                return find_separator(m_sep_.cbegin(), last)->first;
+            }
+            case LC:
+            {
+                return find_separator(
+                    std::make_reverse_iterator(find_closest(m_size_ / 2)),
+                    m_sep_.crend()
+                )->first;
+            }
+            case RC:
+            {
+                return find_separator(
+                    find_closest(m_size_ / 2),
+                    m_sep_.cend()
+                )->first;
+            }
+            case R:
+            {
+                Separators::const_iterator last;
+                if (m_format_ & Formats::FillFromCenter) {
+                    last = find_closest(m_size_ * 3 / 4);
+                } else if (m_format_ & Formats::FillFromLeft) {
+                    last = find_closest(m_size_ / 2);
+                } else {
+                    last = m_sep_.cend();
+                }
+
+                return find_separator(
+                    m_sep_.crbegin(),
+                    std::make_reverse_iterator(last)
+                )->first;
+            }
+        }
     }
 }

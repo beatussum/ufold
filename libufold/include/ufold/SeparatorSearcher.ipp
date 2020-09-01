@@ -32,23 +32,8 @@ namespace ufold
     }
 
     template<class _InputIt>
-    _InputIt SeparatorSearcher::operator()(const _InputIt first, _InputIt last)
+    _InputIt SeparatorSearcher::find_separator(const _InputIt first, const _InputIt last) const
     {
-        switch (countAlignments(m_format_)) {
-            case 2:
-                if (m_format_ & Formats::FillFromCenter) {
-                    last = first + fraction(1, 4);
-                } else {
-                    last = first + fraction(1, 2);
-                }
-
-                break;
-
-            case 3:
-                last = first + fraction(1, 4);
-                break;
-        }
-
         find_mapped_type<_InputIt> functor(first, last);
         _InputIt out = last;
 

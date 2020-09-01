@@ -26,6 +26,8 @@ namespace ufold
 {
     class LIBUFOLD_NO_EXPORT SeparatorSearcher final
     {
+    public:
+        enum FirstIterator : uint8_t { L, LC, RC, R };
     private:
         using size_t = string::size_type;
     private:
@@ -47,8 +49,13 @@ namespace ufold
             const _InputIt m_first_;
             const _InputIt m_last_;
         };
+
+        template<class _InputIt>
+        _InputIt find_separator( const _InputIt first
+                               , const _InputIt last
+                               ) const;
     public:
-        SeparatorSearcher( const std::shared_ptr<Separators> sep
+        SeparatorSearcher( Separators&& sep
                          , const string& str
                          , const Formats format
                          )
@@ -57,12 +64,9 @@ namespace ufold
             , m_format_(format)
         {}
 
-        Separators::difference_type fraction(const size_t n, const size_t d) const;
-
-        template<class _InputIt>
-        _InputIt operator()(const _InputIt first, _InputIt last);
+        width_t operator()(const FirstIterator first);
     private:
-        const std::shared_ptr<Separators> m_sep_;
+        const Separators m_sep_;
         const size_t m_size_;
         const Formats m_format_;
     };

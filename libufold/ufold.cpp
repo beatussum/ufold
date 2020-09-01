@@ -26,9 +26,9 @@ namespace ufold
     namespace
     {
         [[gnu::const]]
-        std::shared_ptr<Separators> scanSeparators(const string_view in, const Formats format)
+        Separators scanSeparators(const string_view in, const Formats format)
         {
-            auto out = std::make_shared<Separators>();
+            Separators out;
 
             for (auto i = in.cbegin(); i != in.cend(); ++i) {
                 switch (const auto sep = getSeparatorTypeOf(*i); sep) {
@@ -46,8 +46,8 @@ namespace ufold
 
                     case SeparatorType::Space:
                     insert:
-                        if (out->empty() or (lastValue(*out) != sep))
-                            out->insert({ distance(in, i), sep });
+                        if (out.empty() or (lastValue(out) != sep))
+                            out.insert({ distance(in, i), sep });
 
                         break;
                 }
@@ -154,8 +154,7 @@ namespace ufold
             return str;
         }
 
-        const auto sep = scanSeparators(str, format);
-        SeparatorSearcher functor(sep, str, format);
+        SeparatorSearcher functor(scanSeparators(str, format), str, format);
 
         const formats_t n = countAlignments(format);
         const bool left = format & Formats::FillFromLeft;
@@ -163,37 +162,30 @@ namespace ufold
         const bool right = format & Formats::FillFromRight;
 
         for (formats_t i = 0; spaces != 0; ++i) {
-            Separators::const_iterator it;
+            width_t index;
 
             if (left and (  (center and (i % n == n - 2))
                          or (!center and (i % n == n - 1))
                          )
                )
             {
-                it = functor(sep->cbegin(), sep->cend());
+                index = functor(SeparatorSearcher::L);
             } else if (center and (i % n == n - 1)) {
-                if ( const auto middle = functor.fraction(1, 2)
-                   ; (left and !right) or (   (i % (n + 1) == n)
-                                          and (left == right)
-                                          )
+                if ((left and !right) or (   (i % (n + 1) == n)
+                                         and (left == right)
+                                         )
                    )
                 {
-                    it = functor( sep->crbegin() + middle
-                                , sep->crend()
-                                ).base();
+                    index = functor(SeparatorSearcher::LC);
                 } else {
-                    it = functor( sep->cbegin() + middle
-                                , sep->cend()
-                                );
+                    index = functor(SeparatorSearcher::RC);
                 }
             } else if (right and (i % n == 0)) {
-                it = functor(sep->crbegin(), sep->crend()).base();
+                index = functor(SeparatorSearcher::R);
             }
 
-            sep->erase(it);
-
             for (auto m = max; m != 0; --m) {
-                str.insert(it->first, 1, str[it->first]);
+                str.insert(index, 1, str[index]);
                 --spaces;
             }
         }
