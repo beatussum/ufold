@@ -16,22 +16,43 @@
  */
 
 
-#ifndef UFOLD_SEPARATOR_SEARCHER_HPP
-#define UFOLD_SEPARATOR_SEARCHER_HPP
+#ifndef UFOLD_SEPARATOR_FINDER_HPP
+#define UFOLD_SEPARATOR_FINDER_HPP
+
+#include "libufold_export.hpp"
 
 #include "ufold/Formats.hpp"
-#include "ufold/Separators.hpp"
+#include "ufold/types.hpp"
+
+#include <map>
 
 namespace ufold
 {
-    class LIBUFOLD_NO_EXPORT SeparatorSearcher final
+    class LIBUFOLD_NO_EXPORT SeparatorFinder final
     {
     public:
-        enum FirstIterator : uint8_t { L, LC, RC, R };
+        using separator_type_t = int8_t;
+
+        enum class SeparatorType : separator_type_t {
+            Capital,
+            Punctuation,
+            Space
+        };
+
+        using Separators = std::map<width_t, SeparatorType>;
+
+        using underlying_type = Separators::const_iterator;
+        using string_index_t = Separators::key_type;
     private:
-        using size_t = string::size_type;
-    private:
-        Separators::const_iterator find_closest(const width_t key) const;
+        underlying_type find_closest(const width_t key) const;
+
+        underlying_type fraction( const width_t n
+                                , const width_t d
+                                ) const;
+
+        underlying_type rfraction( const width_t n
+                                 , const width_t d
+                                 ) const;
 
         template<class _InputIt>
         class find_mapped_type final
@@ -55,22 +76,23 @@ namespace ufold
                                , const _InputIt last
                                ) const;
     public:
-        SeparatorSearcher( Separators&& sep
-                         , const string& str
-                         , const Formats format
-                         )
-            : m_sep_(std::move(sep))
-            , m_size_(str.size())
-            , m_format_(format)
-        {}
+        static constexpr bool isSpace(const char_t) noexcept;
+        static constexpr bool isSeparator(const char_t) noexcept;
+        static constexpr bool isPunctuationMark(const char_t) noexcept;
+        static constexpr SeparatorType getSeparatorTypeOf(const char_t) noexcept;
+    public:
+        SeparatorFinder(const string& str, const Formats format);
 
-        width_t operator()(const FirstIterator first);
+        bool isValid() const { return !m_sep_.empty(); }
+
+        string_index_t next();
     private:
-        const Separators m_sep_;
-        const size_t m_size_;
-        const Formats m_format_;
+        width_t m_size_;
+        Formats m_format_;
+        formats_t m_i_;
+        Separators m_sep_;
     };
 }
 
-#include "ufold/SeparatorSearcher.ipp"
-#endif // UFOLD_SEPARATOR_SEARCHER_HPP
+#include "ufold/SeparatorFinder.ipp"
+#endif // UFOLD_SEPARATOR_FINDER_HPP

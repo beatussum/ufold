@@ -16,9 +16,6 @@
  */
 
 
-#ifndef UFOLD_CORE_IPP
-#define UFOLD_CORE_IPP
-
 #include <algorithm>
 #include <execution>
 
@@ -101,5 +98,3 @@ namespace ufold::core
         return static_cast<std::underlying_type_t<_Enum>>(constant);
     }
 }
-
-#endif // UFOLD_CORE_IPP

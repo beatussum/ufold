@@ -16,18 +16,9 @@
  */
 
 
-#ifndef UFOLD_SEPARATORS_IPP
-#define UFOLD_SEPARATORS_IPP
-
-#include "ufold/core.hpp"
-
-#include <cwctype>
-
 namespace ufold
 {
-    using namespace core;
-
-    constexpr bool isSpace(const char_t c) noexcept
+    constexpr bool SeparatorFinder::isSpace(const char_t c) noexcept
     {
         switch (c) {
             case L' ':      // SPACE
@@ -51,7 +42,7 @@ namespace ufold
         }
     }
 
-    constexpr bool isSeparator(const char_t c) noexcept
+    constexpr bool SeparatorFinder::isSeparator(const char_t c) noexcept
     {
         switch (c) {
             case L'-':      // HYPHEN-MINUS
@@ -65,7 +56,7 @@ namespace ufold
         }
     }
 
-    constexpr bool isPunctuationMark(const char_t c) noexcept
+    constexpr bool SeparatorFinder::isPunctuationMark(const char_t c) noexcept
     {
         switch (c) {
             case L',':
@@ -97,7 +88,7 @@ namespace ufold
         }
     }
 
-    constexpr SeparatorType getSeparatorTypeOf(const char_t c) noexcept
+    constexpr SeparatorFinder::SeparatorType SeparatorFinder::getSeparatorTypeOf(const char_t c) noexcept
     {
         if (std::iswupper(c)) {
             return SeparatorType::Capital;
@@ -106,9 +97,35 @@ namespace ufold
         } else if (isSpace(c)) {
             return SeparatorType::Space;
         } else {
-            return bad_enum<SeparatorType>();
+            return core::bad_enum<SeparatorType>();
         }
     }
-}
 
-#endif // UFOLD_SEPARATORS_IPP
+    template<class _InputIt>
+    _InputIt SeparatorFinder::find_mapped_type<_InputIt>::operator()(const SeparatorType type) const
+    {
+        return std::find_if(std::execution::par_unseq, m_first_, m_last_,
+            [=] (const Separators::value_type& val) {
+                return val.second == type;
+            }
+        );
+    }
+
+    template<class _InputIt>
+    _InputIt SeparatorFinder::find_separator(const _InputIt first, const _InputIt last) const
+    {
+        find_mapped_type<_InputIt> functor(first, last);
+        _InputIt out = last;
+
+        if (m_format_ & Formats::PreferPunctuation)
+            out = functor(SeparatorType::Punctuation);
+
+        if ((out == last) and (m_format_ & Formats::PreferCapital))
+            out = functor(SeparatorType::Capital);
+
+        if (out == last)
+            out = functor(SeparatorType::Space);
+
+        return out;
+    }
+}

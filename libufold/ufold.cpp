@@ -17,45 +17,11 @@
 
 
 #include "ufold/ufold.hpp"
-#include "ufold/SeparatorSearcher.hpp"
+#include "ufold/SeparatorFinder.hpp"
 
 namespace ufold
 {
     using namespace core;
-
-    namespace
-    {
-        [[gnu::const]]
-        Separators scanSeparators(const string_view in, const Formats format)
-        {
-            Separators out;
-
-            for (auto i = in.cbegin(); i != in.cend(); ++i) {
-                switch (const auto sep = getSeparatorTypeOf(*i); sep) {
-                    case SeparatorType::Capital:
-                        if (format & Formats::PreferCapital)
-                            goto insert;
-
-                        break;
-
-                    case SeparatorType::Punctuation:
-                        if (format & Formats::PreferPunctuation)
-                            goto insert;
-
-                        break;
-
-                    case SeparatorType::Space:
-                    insert:
-                        if (out.empty() or (lastValue(out) != sep))
-                            out.insert({ distance(in, i), sep });
-
-                        break;
-                }
-            }
-
-            return out;
-        }
-    }
 
     // `std::out_of_range` cannot be thrown
     string fold(string str, const width_t width)
@@ -74,14 +40,14 @@ namespace ufold
                 async_find_if( std::execution::par_unseq
                              , std::make_reverse_iterator(i)
                              , str.rbegin()
-                             , &isSeparator
+                             , &SeparatorFinder::isSeparator
                              )
             );
         }
 
         for (auto& i : futures) {
             if ( const auto iter = i.get().base()
-               ; isSpace(*iter)
+               ; SeparatorFinder::isSpace(*iter)
                )
             {
                 *iter = L'\n';
@@ -154,36 +120,11 @@ namespace ufold
             return str;
         }
 
-        SeparatorSearcher functor(scanSeparators(str, format), str, format);
-
-        const formats_t n = countAlignments(format);
-        const bool left = format & Formats::FillFromLeft;
-        const bool center = format & Formats::FillFromCenter;
-        const bool right = format & Formats::FillFromRight;
-
-        for (formats_t i = 0; spaces != 0; ++i) {
-            width_t index;
-
-            if (left and (  (center and (i % n == n - 2))
-                         or (!center and (i % n == n - 1))
-                         )
-               )
-            {
-                index = functor(SeparatorSearcher::L);
-            } else if (center and (i % n == n - 1)) {
-                if ((left and !right) or (   (i % (n + 1) == n)
-                                         and (left == right)
-                                         )
-                   )
-                {
-                    index = functor(SeparatorSearcher::LC);
-                } else {
-                    index = functor(SeparatorSearcher::RC);
-                }
-            } else if (right and (i % n == 0)) {
-                index = functor(SeparatorSearcher::R);
-            }
-
+        for ( SeparatorFinder i(str, format)
+            ; i.isValid()
+            ;)
+        {
+            width_t index = i.next();
             for (auto m = max; m != 0; --m) {
                 str.insert(index, 1, str[index]);
                 --spaces;
