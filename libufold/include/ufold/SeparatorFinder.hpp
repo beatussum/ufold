@@ -16,8 +16,8 @@
  */
 
 
-#ifndef UFOLD_SEPARATOR_FINDER_HPP
-#define UFOLD_SEPARATOR_FINDER_HPP
+#ifndef LIBUFOLD_SEPARATOR_FINDER_HPP
+#define LIBUFOLD_SEPARATOR_FINDER_HPP
 
 #include "libufold_export.hpp"
 
@@ -95,4 +95,4 @@ namespace ufold
 }
 
 #include "ufold/SeparatorFinder.ipp"
-#endif // UFOLD_SEPARATOR_FINDER_HPP
+#endif // LIBUFOLD_SEPARATOR_FINDER_HPP

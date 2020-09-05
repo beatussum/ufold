@@ -23,8 +23,8 @@
  */
 
 
-#ifndef UFOLD_UFOLD_HPP
-#define UFOLD_UFOLD_HPP
+#ifndef LIBUFOLD_UFOLD_HPP
+#define LIBUFOLD_UFOLD_HPP
 
 #include "libufold_export.hpp"
 
@@ -75,4 +75,4 @@ namespace ufold
                 , const width_t max = 2);
 }
 
-#endif // UFOLD_UFOLD_HPP
+#endif // LIBUFOLD_UFOLD_HPP

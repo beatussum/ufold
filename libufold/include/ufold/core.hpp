@@ -25,8 +25,8 @@
  */
 
 
-#ifndef UFOLD_CORE_HPP
-#define UFOLD_CORE_HPP
+#ifndef LIBUFOLD_CORE_HPP
+#define LIBUFOLD_CORE_HPP
 
 #include <iterator>
 #include <future>
@@ -89,7 +89,7 @@ namespace ufold::core
     constexpr auto underlying_cast(const _Enum constant) noexcept;
 }
 
-#define UFOLD_ADD_FLAGS_OP(T)                                          \
+#define LIBUFOLD_ADD_FLAGS_OP(T)                                       \
 [[gnu::const]]                                                         \
 constexpr T operator|(const T a, const T b) noexcept                   \
 {                                                                      \
@@ -122,4 +122,4 @@ constexpr bool operator&(const T a, const T b) noexcept                \
 )
 
 #include "ufold/core.ipp"
-#endif // UFOLD_CORE_HPP
+#endif // LIBUFOLD_CORE_HPP

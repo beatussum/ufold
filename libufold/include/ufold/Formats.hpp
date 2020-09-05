@@ -23,8 +23,8 @@
  */
 
 
-#ifndef UFOLD_FORMAT_HPP
-#define UFOLD_FORMAT_HPP
+#ifndef LIBUFOLD_FORMAT_HPP
+#define LIBUFOLD_FORMAT_HPP
 
 #include "ufold/core.hpp"
 
@@ -137,7 +137,7 @@ namespace ufold
          */
         mask_Alignment = 0x1C
     };
-    UFOLD_ADD_FLAGS_OP(Formats)
+    LIBUFOLD_ADD_FLAGS_OP(Formats)
 
     /// Default value used for #Formats flag
     constexpr Formats defaultFormat = Formats::PreferPunctuation
@@ -150,4 +150,4 @@ namespace ufold
 }
 
 #include "ufold/Formats.ipp"
-#endif // UFOLD_FORMAT_HPP
+#endif // LIBUFOLD_FORMAT_HPP

@@ -23,8 +23,8 @@
  */
 
 
-#ifndef UFOLD_TYPES_HPP
-#define UFOLD_TYPES_HPP
+#ifndef LIBUFOLD_TYPES_HPP
+#define LIBUFOLD_TYPES_HPP
 
 #include <string>
 #include <vector>
@@ -47,4 +47,4 @@ namespace ufold
     using string_vec = std::vector<string>;
 }
 
-#endif // UFOLD_TYPES_HPP
+#endif // LIBUFOLD_TYPES_HPP
